@@ -1,9 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessEquipmentShop", "FitnessEquipmentShop\FitnessEquipmentShop.csproj", "{3937FB66-FB12-4180-8242-5FAEF5F40306}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessEquipmentShop.Common", "FitnessEquipmentShop.Common\FitnessEquipmentShop.Common.csproj", "{5D6067CA-858E-4A93-B540-72761F323D58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessEquipmentShop.Data.Models", "FitnessEquipmentShop.Data.Models\FitnessEquipmentShop.Data.Models.csproj", "{3850118B-4ED3-42CE-BF66-F422B05EBC83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessEquipmentShop.Data", "FitnessEquipmentShop.Data\FitnessEquipmentShop.Data.csproj", "{09929C79-81F9-4586-A9D0-AABCE7E0A39F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessEquipmentShop.Web.ViewModel", "FitnessEquipmentShop.Web.ViewModel\FitnessEquipmentShop.Web.ViewModel.csproj", "{F480108C-75E4-4666-B3B5-C8517BEC4BE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessEquipmentShop.UnitTests", "FitnessEquipmentShop.UnitTests\FitnessEquipmentShop.UnitTests.csproj", "{5F4C3719-3376-4F6B-9A37-517A21A753E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +25,26 @@ Global
 		{3937FB66-FB12-4180-8242-5FAEF5F40306}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3937FB66-FB12-4180-8242-5FAEF5F40306}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3937FB66-FB12-4180-8242-5FAEF5F40306}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D6067CA-858E-4A93-B540-72761F323D58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D6067CA-858E-4A93-B540-72761F323D58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D6067CA-858E-4A93-B540-72761F323D58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D6067CA-858E-4A93-B540-72761F323D58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3850118B-4ED3-42CE-BF66-F422B05EBC83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3850118B-4ED3-42CE-BF66-F422B05EBC83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3850118B-4ED3-42CE-BF66-F422B05EBC83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3850118B-4ED3-42CE-BF66-F422B05EBC83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09929C79-81F9-4586-A9D0-AABCE7E0A39F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09929C79-81F9-4586-A9D0-AABCE7E0A39F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09929C79-81F9-4586-A9D0-AABCE7E0A39F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09929C79-81F9-4586-A9D0-AABCE7E0A39F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F480108C-75E4-4666-B3B5-C8517BEC4BE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F480108C-75E4-4666-B3B5-C8517BEC4BE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F480108C-75E4-4666-B3B5-C8517BEC4BE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F480108C-75E4-4666-B3B5-C8517BEC4BE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F4C3719-3376-4F6B-9A37-517A21A753E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F4C3719-3376-4F6B-9A37-517A21A753E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F4C3719-3376-4F6B-9A37-517A21A753E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F4C3719-3376-4F6B-9A37-517A21A753E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
