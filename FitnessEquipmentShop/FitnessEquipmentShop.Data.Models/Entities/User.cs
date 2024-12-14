@@ -11,7 +11,8 @@ namespace FitnessEquipmentShop.Data.Models.Entities
     {
         public User()
         {
-            CartItems = new HashSet<CartItem>();
+            Addresses = new HashSet<Address>();
+            Wishlists = new HashSet<Wishlist>();
             Orders = new HashSet<Order>();
             Reviews = new HashSet<Review>();
         }
@@ -31,13 +32,13 @@ namespace FitnessEquipmentShop.Data.Models.Entities
 
         [Required]
         [StringLength(20)]
-        public string Role { get; set; } // Admin or User
+        public string Role { get; set; } 
 
         [Required]
         public DateTime RegistrationDate { get; set; }
-        public ICollection<CartItem> CartItems { get; set; }
-        public ICollection<Order> Orders { get; set; }
         public ICollection<Review> Reviews { get; set; }
-
+        public ICollection<Address> Addresses { get; set; }
+        public ICollection<Wishlist> Wishlists { get; set; }
+        public ICollection<Order> Orders { get; set; }
     }
 }

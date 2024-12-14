@@ -9,6 +9,10 @@ namespace FitnessEquipmentShop.Data.Models.Entities
 {
     public class Category
     {
+        public Category()
+        {
+            Products = new HashSet<Product>();
+        }
         [Key]
         public int Id { get; set; }
 
@@ -18,5 +22,6 @@ namespace FitnessEquipmentShop.Data.Models.Entities
 
         [StringLength(500)]
         public string Description { get; set; }
+        public ICollection<Product> Products { get; set; }
     }
 }

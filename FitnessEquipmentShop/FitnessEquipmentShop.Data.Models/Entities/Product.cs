@@ -40,9 +40,10 @@ namespace FitnessEquipmentShop.Data.Models.Entities
         [StringLength(500)]
         public string ImageUrl { get; set; }
 
-        public double Rating { get; set; } // Average rating from reviews
+        public double Rating { get; set; } 
         public ICollection<Review> Reviews { get; set; }
         public ICollection<OrderDetail> OrderDetails { get; set; }
+        public ICollection<Wishlist> Wishlists { get; set; }
 
     }
 }

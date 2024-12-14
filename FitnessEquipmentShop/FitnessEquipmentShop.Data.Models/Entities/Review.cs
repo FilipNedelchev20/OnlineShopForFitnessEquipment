@@ -26,7 +26,7 @@ namespace FitnessEquipmentShop.Data.Models.Entities
 
         [Required]
         [Range(1, 5)]
-        public int Rating { get; set; } // 1-5
+        public int Rating { get; set; } 
 
         [StringLength(1000)]
         public string Comment { get; set; }
