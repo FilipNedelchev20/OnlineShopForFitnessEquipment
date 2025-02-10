@@ -1,0 +1,26 @@
+﻿@model FitnessEquipmentShop.Data.Models.Entities.Product
+
+@{
+    ViewData["Title"] = @Model.Name;
+}
+
+<h2>@Model.Name</h2>
+<img src="@Model.ImageUrl" class="img-fluid" alt="@Model.Name">
+<p>@Model.Description</p>
+<p><strong>Price:</strong> @Model.Price lv.</p>
+<a href="@Url.Action("Add", "Cart", new { productId = Model.Id })" class="btn btn-success">Add to cart</a>
+<a href="@Url.Action("Add", "Wishlist", new { productId = Model.Id })" class="btn btn-warning">Add to wishlist</a>
+
+<h3>Reviews</h3>
+@foreach (var review in Model.Reviews)
+{
+    <div>
+        <strong>@review.User.FullName:</strong> <em>@review.Comment</em> (Оценка: @review.Rating/5)
+    </div>
+}
+<form method="post" action="@Url.Action("Add", "Review")">
+    <input type="hidden" name="ProductId" value="@Model.Id" />
+    <textarea name="Comment" placeholder="Напиши ревю..." class="form-control"></textarea>
+    <input type="number" name="Rating" min="1" max="5" class="form-control" />
+    <button type="submit" class="btn btn-primary mt-2">Добави ревю</button>
+</form>

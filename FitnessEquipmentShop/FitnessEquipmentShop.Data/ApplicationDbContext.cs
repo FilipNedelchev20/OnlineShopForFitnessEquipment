@@ -4,19 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FitnessEquipmentShop.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
-        public ApplicationDbContext()
-        {
-            
-        }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
+           : base(options)
         {
         }
-        
-            public DbSet<User> Users { get; set; }
-            public DbSet<Product> Products { get; set; }
+
+        public DbSet<Product> Products { get; set; }
             public DbSet<Category> Categories { get; set; }
             public DbSet<CartItem> CartItems { get; set; }
             public DbSet<Order> Orders { get; set; }
@@ -24,6 +19,9 @@ namespace FitnessEquipmentShop.Data
             public DbSet<Review> Reviews { get; set; }
             public DbSet<Wishlist> Wishlist { get; set; }
             public DbSet<Address> Address { get; set; }
-       
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+        }
     }
 }
