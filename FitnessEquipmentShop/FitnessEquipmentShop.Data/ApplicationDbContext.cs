@@ -30,6 +30,11 @@ namespace FitnessEquipmentShop.Data
                 .WithMany()
                 .HasForeignKey(a => a.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Order>()
+                .HasOne(a => a.Address)
+                .WithMany()
+                .HasForeignKey(a => a.AddressId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
