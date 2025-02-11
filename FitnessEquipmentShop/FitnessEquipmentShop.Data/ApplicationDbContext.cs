@@ -18,8 +18,8 @@ namespace FitnessEquipmentShop.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        public DbSet<Wishlist> Wishlist { get; set; }
-        public DbSet<Address> Address { get; set; }
+        public DbSet<Wishlist> Wishlists { get; set; }
+        public DbSet<Address> Addresses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
