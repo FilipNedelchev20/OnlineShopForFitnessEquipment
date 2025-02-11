@@ -1,7 +1,9 @@
 ﻿using FitnessEquipmentShop.Data.Models.Entities;
 using FitnessEquipmentShop.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize]
 public class OrderController : Controller
 {
     private readonly ApplicationDbContext _context;
