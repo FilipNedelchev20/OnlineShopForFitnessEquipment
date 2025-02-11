@@ -22,7 +22,7 @@ namespace FitnessEquipmentShop.Data.Models.Entities
         [ForeignKey(nameof(UserId))]
         public User User { get; set; }
         [Required]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         [Required]
         [Range(1, 5)]

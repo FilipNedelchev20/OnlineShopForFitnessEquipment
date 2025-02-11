@@ -1,16 +1,10 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using Microsoft.AspNetCore.Identity;
 
 namespace FitnessEquipmentShop.Data.Models.Entities
 {
-    public class User : IdentityUser
+    public class User : IdentityUser 
     {
         public string FullName { get; set; } 
-    
     }
 }

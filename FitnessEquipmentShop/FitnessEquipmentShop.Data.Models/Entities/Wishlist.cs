@@ -9,7 +9,7 @@ namespace FitnessEquipmentShop.Data.Models.Entities
         public int Id { get; set; }
 
         [Required]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         [ForeignKey(nameof(UserId))]
         public User User { get; set; }
