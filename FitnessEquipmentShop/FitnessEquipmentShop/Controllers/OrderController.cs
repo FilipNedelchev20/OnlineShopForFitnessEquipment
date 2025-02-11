@@ -24,4 +24,8 @@ public class OrderController : Controller
         _context.SaveChanges();
         return RedirectToAction("Index");
     }
+    public IActionResult Checkout()
+    {
+        return View();
+    }
 }
