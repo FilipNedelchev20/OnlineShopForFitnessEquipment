@@ -24,8 +24,10 @@ namespace FitnessEquipmentShop.Data.Models.Entities
 
         [Required]
         public DateTime OrderDate { get; set; }
-        [Required]
+        [ForeignKey(nameof(AddressId))]
         public Address Address { get; set; }
+        [Required]
+        public int AddressId { get; set; }
         [Required]
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalAmount { get; set; }
