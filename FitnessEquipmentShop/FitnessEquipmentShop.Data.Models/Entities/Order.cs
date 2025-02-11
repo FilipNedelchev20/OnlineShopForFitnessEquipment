@@ -31,7 +31,7 @@ namespace FitnessEquipmentShop.Data.Models.Entities
 
         [Required]
         [StringLength(20)]
-        public string Status { get; set; } // Pending, Completed, Canceled
+        public string Status { get; set; } 
         public ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }
