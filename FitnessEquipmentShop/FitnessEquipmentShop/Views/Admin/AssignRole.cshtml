@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Assign Role";
+}
+
+<h2>Assign Role</h2>
+
+@if (ViewBag.Message != null)
+{
+    <p class="alert alert-success">@ViewBag.Message</p>
+}
+
+<form method="post">
+    <label>Email:</label>
+    <input type="email" name="email" required class="form-control" />
+
+    <label>Role:</label>
+    <input type="text" name="role" required class="form-control" placeholder="Admin/User" />
+
+    <button type="submit" class="btn btn-primary mt-2">Assign Role</button>
+</form>
