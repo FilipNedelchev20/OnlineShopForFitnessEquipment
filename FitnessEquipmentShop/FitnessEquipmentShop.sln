@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessEquipmentShop.Web.Vi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessEquipmentShop.UnitTests", "FitnessEquipmentShop.UnitTests\FitnessEquipmentShop.UnitTests.csproj", "{5F4C3719-3376-4F6B-9A37-517A21A753E4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessEquipmentShop.Data.Seed", "FitnessEquipmentShop.Data.Seed\FitnessEquipmentShop.Data.Seed.csproj", "{9DE767EF-DE1B-43C4-9E53-0E5C801F1C48}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{5F4C3719-3376-4F6B-9A37-517A21A753E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F4C3719-3376-4F6B-9A37-517A21A753E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F4C3719-3376-4F6B-9A37-517A21A753E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DE767EF-DE1B-43C4-9E53-0E5C801F1C48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DE767EF-DE1B-43C4-9E53-0E5C801F1C48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DE767EF-DE1B-43C4-9E53-0E5C801F1C48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DE767EF-DE1B-43C4-9E53-0E5C801F1C48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FitnessEquipmentShop.Data.Seed\FitnessEquipmentShop.Data.Seed.csproj" />
     <ProjectReference Include="..\FitnessEquipmentShop.Data\FitnessEquipmentShop.Data.csproj" />
   </ItemGroup>
 
