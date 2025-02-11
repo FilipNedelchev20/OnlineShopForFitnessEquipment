@@ -13,7 +13,7 @@ public class WishlistController : Controller
 
     public IActionResult Index()
     {
-        var wishlist = _context.Wishlist.ToList();
+        var wishlist = _context.Wishlists.ToList();
         return View(wishlist);
     }
 
@@ -23,7 +23,7 @@ public class WishlistController : Controller
         if (product == null) return NotFound();
 
         var wishlistItem = new Wishlist { ProductId = productId };
-        _context.Wishlist.Add(wishlistItem);
+        _context.Wishlists.Add(wishlistItem);
         _context.SaveChanges();
 
         return RedirectToAction("Index");
