@@ -1,0 +1,21 @@
+﻿@model IEnumerable<FitnessEquipmentShop.Data.Models.Entities.Category>
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<h2>Categories</h2>
+<div class="row">
+    @foreach (var category in Model)
+    {
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">@category.Name</h5>
+                    <p class="card-text">@category.Description</p>
+                    <a href="@Url.Action("Index", "Product", new { categoryId = category.Id })" class="btn btn-primary">View products</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
