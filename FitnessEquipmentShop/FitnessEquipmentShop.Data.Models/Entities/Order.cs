@@ -24,7 +24,8 @@ namespace FitnessEquipmentShop.Data.Models.Entities
 
         [Required]
         public DateTime OrderDate { get; set; }
-
+        [Required]
+        public Address Address { get; set; }
         [Required]
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalAmount { get; set; }
@@ -33,5 +34,7 @@ namespace FitnessEquipmentShop.Data.Models.Entities
         [StringLength(20)]
         public string Status { get; set; } 
         public ICollection<OrderDetail> OrderDetails { get; set; }
+    
+        
     }
 }
