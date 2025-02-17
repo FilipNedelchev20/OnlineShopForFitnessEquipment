@@ -15,7 +15,11 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
+
+
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
@@ -23,6 +27,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     await IdentityInitializer.SeedRolesAndAdminAsync(services);
 }
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -42,6 +47,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
+
+
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
