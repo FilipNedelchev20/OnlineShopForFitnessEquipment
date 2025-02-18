@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessEquipmentShop.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250211093051_AddingAnAddressProperty")]
-    partial class AddingAnAddressProperty
+    [Migration("20250218074233_CraetingDatabase")]
+    partial class CraetingDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

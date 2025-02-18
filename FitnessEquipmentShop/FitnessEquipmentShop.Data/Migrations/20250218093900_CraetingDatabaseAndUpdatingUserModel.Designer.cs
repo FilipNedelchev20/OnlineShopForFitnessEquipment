@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessEquipmentShop.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250211074454_AddIdentityWithRoles")]
-    partial class AddIdentityWithRoles
+    [Migration("20250218093900_CraetingDatabaseAndUpdatingUserModel")]
+    partial class CraetingDatabaseAndUpdatingUserModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -60,7 +60,7 @@ namespace FitnessEquipmentShop.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Address");
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("FitnessEquipmentShop.Data.Models.Entities.CartItem", b =>
@@ -121,6 +121,9 @@ namespace FitnessEquipmentShop.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("AddressId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
@@ -137,6 +140,8 @@ namespace FitnessEquipmentShop.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("UserId");
 
@@ -269,7 +274,6 @@ namespace FitnessEquipmentShop.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FullName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -339,7 +343,7 @@ namespace FitnessEquipmentShop.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Wishlist");
+                    b.ToTable("Wishlists");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -507,11 +511,19 @@ namespace FitnessEquipmentShop.Data.Migrations
 
             modelBuilder.Entity("FitnessEquipmentShop.Data.Models.Entities.Order", b =>
                 {
+                    b.HasOne("FitnessEquipmentShop.Data.Models.Entities.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("FitnessEquipmentShop.Data.Models.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Address");
 
                     b.Navigation("User");
                 });
