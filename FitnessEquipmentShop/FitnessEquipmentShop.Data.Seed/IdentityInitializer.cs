@@ -1,9 +1,10 @@
 ﻿using FitnessEquipmentShop.Data;
 using FitnessEquipmentShop.Data.Models.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Linq;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace FitnessEquipmentShop.Data.Seed
@@ -17,6 +18,7 @@ namespace FitnessEquipmentShop.Data.Seed
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                var userStore = scope.ServiceProvider.GetRequiredService<IUserStore<User>>();
 
                 string[] roleNames = { "Admin", "User" };
 
@@ -29,37 +31,26 @@ namespace FitnessEquipmentShop.Data.Seed
                     }
                 }
 
-                // Check if the admin user already exists in the database
-                var adminUser = await userManager.FindByEmailAsync("admin@example.com");
-                if (adminUser == null)
+                // Check if the admin user already exists
+                var admin = await userManager.FindByEmailAsync("admin@gmail.com");
+                if (admin == null)
                 {
-                    var user = new User
-                    {
-                        UserName = "admin",
-                        Email = "admin@example.com",
-                        FullName = "Admin User",
-                        EmailConfirmed = true
-                    };
-
-                    // Hash the password using PasswordHasher
-                    var hasher = new PasswordHasher<User>();
-                    user.PasswordHash = hasher.HashPassword(user, "Admin123!");
-
-                    // Add the user to the database manually
-                    dbContext.Users.Add(user);
-                    await dbContext.SaveChangesAsync();
-
-                    // Assign the Admin role
-                    await userManager.AddToRoleAsync(user, "Admin");
+                    User admin2 = new User();
+                    admin2.FullName = "Tomaaaaaaaaa";
+                    await userStore.SetUserNameAsync(admin2, "admin@gmail.com", default);
+                    await ((IUserEmailStore<User>)userStore).SetEmailAsync(admin2, "admin@gmail.com", default);
+                    await ((IUserEmailStore<User>)userStore).SetEmailConfirmedAsync(admin2, true, default);
+                    await userManager.CreateAsync(admin2, "Pr0toty1pe@1");
+                    await userManager.AddToRoleAsync(admin2, "Admin");
                 }
                 else
                 {
-                    // If the admin user already exists, reset their password
+                    // Reset password manually
                     string newPassword = "Admin123!";
                     var passwordHasher = new PasswordHasher<User>();
-                    adminUser.PasswordHash = passwordHasher.HashPassword(adminUser, newPassword);
+                    admin.PasswordHash = passwordHasher.HashPassword(admin, newPassword);
 
-                    dbContext.Users.Update(adminUser);
+                    dbContext.Users.Update(admin);
                     await dbContext.SaveChangesAsync();
                 }
             }
