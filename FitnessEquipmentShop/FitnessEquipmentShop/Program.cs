@@ -3,6 +3,8 @@ using FitnessEquipmentShop.Data.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using FitnessEquipmentShop.Data.Seed;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using FitnessEquipmentShop.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
 
 
@@ -27,6 +30,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     await IdentityInitializer.SeedRolesAndAdminAsync(services);
 }
+
 
 
 // Configure the HTTP request pipeline.
