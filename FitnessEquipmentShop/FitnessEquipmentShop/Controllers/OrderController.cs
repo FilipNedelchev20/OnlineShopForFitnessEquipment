@@ -20,49 +20,49 @@ public class OrderController : Controller
         _userManager = userManager;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        var orders = _context.Orders.ToList();
+        var orders = await _context.Orders.ToListAsync();
         return View(orders);
     }
 
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
         var order = new Order { OrderDate = DateTime.Now };
-        _context.Orders.Add(order);
-        _context.SaveChanges();
+        await _context.Orders.AddAsync(order);
+        await _context.SaveChangesAsync();
         return RedirectToAction("Index");
     }
-    public IActionResult Checkout()
+    public async Task<IActionResult> Checkout()
     {
         var userId = _userManager.GetUserId(User);
-        var cartItems = _context.CartItems
+        var cartItems = await _context.CartItems
             .Include(c => c.Product)
             .Where(c => c.UserId == userId)
-            .ToList();
+            .ToListAsync();
 
         if (!cartItems.Any())
         {
-            return RedirectToAction("Index", "Cart"); // Redirect if cart is empty
+            return RedirectToAction("Index", "Cart"); 
         }
 
         var checkoutViewModel = new CheckoutViewModel
         {
             CartItems = cartItems,
             TotalPrice = cartItems.Sum(c => c.Product.Price * c.Quantity),
-            Address = _context.Addresses.FirstOrDefault(a => a.UserId == userId) // Pre-fill address if exists
+            Address = await _context.Addresses.FirstOrDefaultAsync(a => a.UserId == userId) 
         };
 
         return View(checkoutViewModel);
     }
     [HttpPost]
-    public IActionResult PlaceOrder(Address address)
+    public async Task<IActionResult> PlaceOrder(Address address)
     {
         var userId = _userManager.GetUserId(User);
-        var cartItems = _context.CartItems
+        var cartItems = await _context.CartItems
             .Include(c => c.Product)
             .Where(c => c.UserId == userId)
-            .ToList();
+            .ToListAsync();
 
         if (!cartItems.Any())
         {
@@ -83,9 +83,9 @@ public class OrderController : Controller
             Address = address
         };
 
-        _context.Orders.Add(order);
+        await _context.Orders.AddAsync(order);
         _context.CartItems.RemoveRange(cartItems);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return RedirectToAction("OrderConfirmation", new { orderId = order.Id });
     }
