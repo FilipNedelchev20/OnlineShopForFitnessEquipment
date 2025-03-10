@@ -17,25 +17,25 @@ public class CartController : Controller
         return View(cartItems);
     }
 
-    public IActionResult Add(int productId)
+    public async Task<IActionResult> Add(int productId)
     {
-        var product = _context.Products.Find(productId);
+        var product = await _context.Products.FindAsync(productId);
         if (product == null) return NotFound();
 
         var cartItem = new CartItem { ProductId = productId };
-        _context.CartItems.Add(cartItem);
-        _context.SaveChanges();
+        await _context.CartItems.AddAsync(cartItem);
+        await _context.SaveChangesAsync();
 
         return RedirectToAction("Index");
     }
 
-    public IActionResult Remove(int id)
+    public async Task<IActionResult> Remove(int id)
     {
-        var cartItem = _context.CartItems.Find(id);
+        var cartItem = await _context.CartItems.FindAsync(id);
         if (cartItem != null)
         {
             _context.CartItems.Remove(cartItem);
-            _context.SaveChanges();
+           await _context.SaveChangesAsync();
         }
         return RedirectToAction("Index");
     }
