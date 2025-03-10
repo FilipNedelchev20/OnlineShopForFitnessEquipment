@@ -20,6 +20,7 @@ namespace FitnessEquipmentShop.Data.Models.Entities
         [StringLength(100)]
         public string Name { get; set; }
 
+        [Required]
         [StringLength(500)]
         public string Description { get; set; }
         public ICollection<Product> Products { get; set; }
