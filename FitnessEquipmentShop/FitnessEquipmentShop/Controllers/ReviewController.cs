@@ -18,12 +18,12 @@ public class ReviewController : Controller
     }
 
     [HttpPost]
-    public IActionResult Add(Review review)
+    public async Task<IActionResult> Add(Review review)
     {
         if (ModelState.IsValid)
         {
-            _context.Reviews.Add(review);
-            _context.SaveChanges();
+            await _context.Reviews.AddAsync(review);
+            await _context.SaveChangesAsync();
         }
         return RedirectToAction("Index", new { productId = review.ProductId });
     }
