@@ -17,14 +17,14 @@ public class WishlistController : Controller
         return View(wishlist);
     }
 
-    public IActionResult Add(int productId)
+    public async Task<IActionResult> Add(int productId)
     {
-        var product = _context.Products.Find(productId);
+        var product = await _context.Products.FindAsync(productId);
         if (product == null) return NotFound();
 
         var wishlistItem = new Wishlist { ProductId = productId };
-        _context.Wishlists.Add(wishlistItem);
-        _context.SaveChanges();
+        await _context.Wishlists.AddAsync(wishlistItem);
+        await _context.SaveChangesAsync();
 
         return RedirectToAction("Index");
     }
