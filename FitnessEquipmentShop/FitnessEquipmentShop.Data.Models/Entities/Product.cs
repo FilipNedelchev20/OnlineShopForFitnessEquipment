@@ -15,6 +15,7 @@ namespace FitnessEquipmentShop.Data.Models.Entities
             Reviews = new HashSet<Review>();
             OrderDetails = new HashSet<OrderDetail>();
         }
+
         [Key]
         public int Id { get; set; }
 
@@ -34,16 +35,22 @@ namespace FitnessEquipmentShop.Data.Models.Entities
 
         [ForeignKey(nameof(CategoryId))]
         public Category Category { get; set; }
+
         [Required]
         public int CategoryId { get; set; }
 
         [StringLength(500)]
         public string ImageUrl { get; set; }
 
-        public double Rating { get; set; } 
+        public double Rating { get; set; }
+
         public ICollection<Review> Reviews { get; set; }
         public ICollection<OrderDetail> OrderDetails { get; set; }
         public ICollection<Wishlist> Wishlists { get; set; }
 
+        // Track which admin created this product
+        [Required]
+        public string CreatedBy { get; set; }
     }
+
 }
