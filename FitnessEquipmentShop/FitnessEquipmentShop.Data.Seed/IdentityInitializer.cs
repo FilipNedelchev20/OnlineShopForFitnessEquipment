@@ -22,7 +22,6 @@ namespace FitnessEquipmentShop.Data.Seed
 
                 string[] roleNames = { "Admin", "User" };
 
-                // Ensure roles exist
                 foreach (var roleName in roleNames)
                 {
                     if (!await roleManager.RoleExistsAsync(roleName))
@@ -30,8 +29,6 @@ namespace FitnessEquipmentShop.Data.Seed
                         await roleManager.CreateAsync(new IdentityRole(roleName));
                     }
                 }
-
-                // Check if the admin user already exists
                 var admin = await userManager.FindByEmailAsync("admin@gmail.com");
                 if (admin == null)
                 {
@@ -45,7 +42,6 @@ namespace FitnessEquipmentShop.Data.Seed
                 }
                 else
                 {
-                    // Reset password manually
                     string newPassword = "Admin123!";
                     var passwordHasher = new PasswordHasher<User>();
                     admin.PasswordHash = passwordHasher.HashPassword(admin, newPassword);
