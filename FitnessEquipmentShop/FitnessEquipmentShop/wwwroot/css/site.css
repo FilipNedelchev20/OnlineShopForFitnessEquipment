@@ -16,3 +16,28 @@ html {
 body {
     margin-bottom: 60px;
 }
+.toggle-desc {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 16px;
+  /*font-weight: bold;*/
+    color: #fff;
+    background-color: #007bff; /* Bootstrap primary blue */
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+    text-decoration: none;
+}
+
+    .toggle-desc:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+        color: white;
+        text-decoration: none;
+    }
+
+    .toggle-desc:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.8);
+    }
+
