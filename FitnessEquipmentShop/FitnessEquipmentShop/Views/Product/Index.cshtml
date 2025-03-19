@@ -117,13 +117,11 @@
                 var isExpanded = button.attr("data-state") === "expanded";
 
                 if (isExpanded) {
-                    // Collapse: Hide fullDesc and show shortDesc
                      fullDesc.stop(true, true).slideUp(300, function () {
                      shortDesc.stop(true, true).fadeIn(200);
                     });
                  button.text("Read More").attr("data-state", "collapsed");
                 } else {
-                  // Expand: Show fullDesc without hiding both at the same time
                   shortDesc.stop(true, true).fadeOut(200);
                   fullDesc.stop(true, true).removeClass("d-none").hide().slideDown(300);
                      button.text("Read Less").attr("data-state", "expanded");
