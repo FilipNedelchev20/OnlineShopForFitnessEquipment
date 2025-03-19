@@ -1,43 +1,228 @@
-﻿html {
-    font-size: 14px;
+﻿/* Reset & Base */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+caption {
+    margin: 0;
+    padding: 0;
+    border: 0;
 }
 
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-}
-
-html {
-    position: relative;
-    min-height: 100%;
+html, body {
+    height: 100%;
 }
 
 body {
-    margin-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.5;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    scroll-behavior: smooth;
+    background-color: white;
 }
+
+/* Make main fill available space */
+main {
+    flex: 1;
+}
+
+/* Color Palette */
+:root {
+    --accent-color: #FCD900; /* Technogym Yellow */
+    --dark-color: #222; /* Dark background for nav/footer */
+    --light-color: #f9f9f9; /* Light background */
+    --text-color: #333; /* Primary text color */
+}
+
+/* Container spacing */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--dark-color);
+    border-bottom: 3px solid var(--accent-color);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    color: #fff !important;
+    font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+    color: #fff !important;
+    margin-right: 1rem;
+    transition: color 0.3s;
+}
+
+    .navbar-nav .nav-link:hover {
+        color: var(--accent-color) !important;
+    }
+
+.navbar-toggler-icon {
+    filter: invert(100%);
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    height: 400px;
+    background: url('../images/hero-fitness.png') center center no-repeat;
+    background-size: 250px auto; /* Adjusted for a good fit */
+    background-color: white; /* Set background to white */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+    
+
+/* Adjusted to match image size instead of covering the full section */
+.hero-overlay {
+    position: absolute;
+    width: 250px; /* Match the image size */
+    height: 250px; /* Match the image size */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.3); /* Slightly lighter overlay */
+}
+
+.hero-content {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative; /* Ensure it's above the overlay */
+    z-index: 2;
+}
+
+    .hero-content h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .hero-content p {
+        font-size: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+
+
+/* Buttons */
+.btn {
+    transition: all 0.3s ease;
+}
+
+    .btn:hover {
+        transform: scale(1.03);
+    }
+
+.social-login-btn img {
+    width: 30px; /* reduced from 40px */
+    height: 30px; /* reduced from 40px */
+    border-radius: 50%; /* Make it circular */
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.social-login-btn:hover img {
+    transform: scale(1.1);
+    border-color: var(--primary-color); /* Or your accent color */
+}
+
+.btn-accent {
+    background-color: var(--accent-color);
+    border: none;
+    color: #000;
+    font-weight: 600;
+}
+
+    .btn-accent:hover {
+        background-color: #e0c800;
+    }
+
+/* Card Hover */
+.card {
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+    .card:hover {
+        transform: translateY(-3px);
+    }
+
+/* Read More Toggle */
+.short-desc, .full-desc {
+    transition: opacity 0.3s ease;
+}
+
+.short-desc {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.full-desc {
+    text-align: justify;
+}
+
 .toggle-desc {
     display: inline-block;
     padding: 6px 12px;
     font-size: 16px;
-  /*font-weight: bold;*/
-    color: #fff;
-    background-color: #007bff; /* Bootstrap primary blue */
-    border: 2px solid #007bff;
+    color: #000;
+    background-color: var(--accent-color);
+    border: 2px solid var(--accent-color);
     border-radius: 5px;
+    cursor: pointer;
     transition: all 0.3s ease-in-out;
     text-decoration: none;
+    margin-top: 0.5rem;
 }
 
     .toggle-desc:hover {
-        background-color: #0056b3;
-        border-color: #0056b3;
-        color: white;
-        text-decoration: none;
+        background-color: #e0c800;
     }
 
-    .toggle-desc:focus {
-        outline: none;
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.8);
+/* Footer */
+footer, footer p {
+    color: #fff !important;
+}
+
+footer {
+    background-color: var(--dark-color);
+    color: #fff; /* Set text to white for contrast */
+    padding: 2rem 0;
+    text-align: center;
+    border-top: 3px solid var(--accent-color);
+    margin-top: 0; /* Remove extra margin if any */
+}
+
+    footer p {
+        margin: 0;
+        font-size: 0.95rem;
     }
 
+/* Media Queries */
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .navbar-brand {
+        font-size: 1.25rem;
+    }
+}
