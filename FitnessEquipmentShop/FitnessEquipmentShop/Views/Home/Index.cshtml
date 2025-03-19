@@ -1,15 +1,18 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var productsUrl = Url.Action("Index", "Product");
 }
+@* Only show header on Home page *@
 
-@if (!User.Identity.IsAuthenticated)
-{
-    <div class="jumbotron text-center">
-        <h1>Welcome to Fitness Shop</h1>
-        <p>Find the best fitness equipment for your needs.</p>
-    </div>
-}
-else
-{
-    <h2>Welcome back, @User.Identity.Name!</h2>
-}
+
+<div class="text-center my-5">
+    @await Html.PartialAsync("_Header")
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a href="@productsUrl" class="btn btn-accent">Explore Products</a>
+    }
+    else
+    {
+        <a href="@Url.Page("/Account/Login", new { area = "Identity", ReturnUrl = productsUrl })" class="btn btn-accent">Explore Products</a>
+    }
+</div>
