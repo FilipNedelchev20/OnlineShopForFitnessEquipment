@@ -1,6 +1,26 @@
-﻿<footer class="mt-5">
+﻿<footer class="mt-5 bg-dark text-light py-4">
     <div class="container text-center">
-        <hr style="border-top: 1px solid #555;" />
+        <div class="row">
+            <div class="col-md-4">
+                <h5>About Us</h5>
+                <p>We provide high-quality fitness equipment to help you achieve your health goals.</p>
+            </div>
+            <div class="col-md-4">
+                <h5>Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="@Url.Action("Index", "Home")" class="text-light">Home</a></li>
+                    <li><a href="@Url.Action("Index", "Product")" class="text-light">Products</a></li>
+                    <li><a href="@Url.Action("Contact", "Home")" class="text-light">Contact</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>Follow Us</h5>
+                <a href="#" class="text-light me-2"><i class="fab fa-facebook fa-lg"></i></a>
+                <a href="#" class="text-light me-2"><i class="fab fa-instagram fa-lg"></i></a>
+                <a href="#" class="text-light"><i class="fab fa-twitter fa-lg"></i></a>
+            </div>
+        </div>
+        <hr class="border-secondary" />
         <p class="mb-0">&copy; @DateTime.Now.Year - Fitness Shop. All rights reserved.</p>
     </div>
 </footer>
