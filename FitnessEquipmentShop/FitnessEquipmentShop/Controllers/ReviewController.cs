@@ -1,19 +1,19 @@
-﻿using FitnessEquipmentShop.Data.Models.Entities;
-using FitnessEquipmentShop.Data;
+﻿using FitnessEquipmentShop.Services;
+using FitnessEquipmentShop.Data.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 public class ReviewController : Controller
 {
-    private readonly ApplicationDbContext _context;
-
-    public ReviewController(ApplicationDbContext context)
+    private readonly IReviewService _reviewService;
+    public ReviewController(IReviewService reviewService)
     {
-        _context = context;
+        _reviewService = reviewService;
     }
 
-    public IActionResult Index(int productId)
+    public async Task<IActionResult> Index(int productId)
     {
-        var reviews = _context.Reviews.Where(r => r.ProductId == productId).ToList();
+        var reviews = await _reviewService.GetReviewsByProductIdAsync(productId);
         return View(reviews);
     }
 
@@ -22,8 +22,7 @@ public class ReviewController : Controller
     {
         if (ModelState.IsValid)
         {
-            await _context.Reviews.AddAsync(review);
-            await _context.SaveChangesAsync();
+            await _reviewService.AddReviewAsync(review);
         }
         return RedirectToAction("Index", new { productId = review.ProductId });
     }

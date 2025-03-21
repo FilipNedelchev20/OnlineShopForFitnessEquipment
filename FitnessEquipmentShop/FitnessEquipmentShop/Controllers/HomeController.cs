@@ -1,39 +1,38 @@
-﻿using System.Diagnostics;
-using FitnessEquipmentShop.Data;
-using FitnessEquipmentShop.Models;
-using FitnessEquipmentShop.Web.ViewModel;
+﻿using FitnessEquipmentShop.Services;
 using FitnessEquipmentShop.Web.ViewModel.Home;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FitnessEquipmentShop.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ApplicationDbContext _context;
+        private readonly IProductService _productService;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+        public HomeController(ILogger<HomeController> logger, IProductService productService)
         {
             _logger = logger;
-            _context = context;
+            _productService = productService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var topProducts = _context.Products
-                .OrderByDescending(p => p.Rating)
-                .Take(5)
-                .Select(p => new ProductViewModel
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Price = p.Price,
-                    ImageUrl = p.ImageUrl
-                })
-                .ToList();
+            var products = await _productService.GetAllProductsAsync();
+            var topProducts = products.OrderByDescending(p => p.Rating)
+                                       .Take(5)
+                                       .Select(p => new ProductViewModel
+                                       {
+                                           Id = p.Id,
+                                           Name = p.Name,
+                                           Price = p.Price,
+                                           ImageUrl = p.ImageUrl
+                                       })
+                                       .ToList();
 
             var viewModel = new HomeViewModel { TopProducts = topProducts };
-
             return View(viewModel);
         }
     }

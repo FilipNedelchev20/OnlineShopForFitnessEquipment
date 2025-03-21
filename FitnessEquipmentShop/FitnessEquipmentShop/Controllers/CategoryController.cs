@@ -1,21 +1,20 @@
-﻿using FitnessEquipmentShop.Data;
+﻿using FitnessEquipmentShop.Services;
 using FitnessEquipmentShop.Data.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+using System.Threading.Tasks;
 
 public class CategoryController : Controller
 {
-    private readonly ApplicationDbContext _context;
-
-    public CategoryController(ApplicationDbContext context)
+    private readonly ICategoryService _categoryService;
+    public CategoryController(ICategoryService categoryService)
     {
-        _context = context;
+        _categoryService = categoryService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        var categories =  _context.Categories.ToList();
+        var categories = await _categoryService.GetAllCategoriesAsync();
         return View(categories);
     }
 
@@ -31,8 +30,7 @@ public class CategoryController : Controller
     {
         if (ModelState.IsValid)
         {
-            await _context.Categories.AddAsync(category);
-            await _context.SaveChangesAsync();
+            await _categoryService.CreateCategoryAsync(category);
             return RedirectToAction("Index");
         }
         return View(category);

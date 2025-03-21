@@ -1,31 +1,30 @@
-﻿using FitnessEquipmentShop.Data.Models.Entities;
-using FitnessEquipmentShop.Data;
+﻿using FitnessEquipmentShop.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 public class WishlistController : Controller
 {
-    private readonly ApplicationDbContext _context;
-
-    public WishlistController(ApplicationDbContext context)
+    private readonly IWishlistService _wishlistService;
+    public WishlistController(IWishlistService wishlistService)
     {
-        _context = context;
+        _wishlistService = wishlistService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        var wishlist = _context.Wishlists.ToList();
+        var wishlist = await _wishlistService.GetWishlistItemsAsync();
         return View(wishlist);
     }
 
     public async Task<IActionResult> Add(int productId)
     {
-        var product = await _context.Products.FindAsync(productId);
-        if (product == null) return NotFound();
+        await _wishlistService.AddToWishlistAsync(productId);
+        return RedirectToAction("Index");
+    }
 
-        var wishlistItem = new Wishlist { ProductId = productId };
-        await _context.Wishlists.AddAsync(wishlistItem);
-        await _context.SaveChangesAsync();
-
+    public async Task<IActionResult> Remove(int id)
+    {
+        await _wishlistService.RemoveFromWishlistAsync(id);
         return RedirectToAction("Index");
     }
 }

@@ -1,70 +1,86 @@
-﻿using FitnessEquipmentShop.Data;
-using FitnessEquipmentShop.Data.Models.Entities;
+﻿using FitnessEquipmentShop.Data.Models.Entities;
+using FitnessEquipmentShop.Services;
 using FitnessEquipmentShop.Web.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Threading.Tasks;
 
 public class ProductController : Controller
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IProductService _productService;
+    private readonly ICategoryService _categoryService;
 
-    public ProductController(ApplicationDbContext context)
+    public ProductController(IProductService productService, ICategoryService categoryService)
     {
-        _context = context;
+        _productService = productService;
+        _categoryService = categoryService;
     }
 
+    // Accessible by everyone
+    [AllowAnonymous]
     public async Task<IActionResult> Index()
     {
-        var products = _context.Products.ToList();
+        var products = await _productService.GetAllProductsAsync();
         return View(products);
     }
 
+    // Accessible by everyone
+    [AllowAnonymous]
     public async Task<IActionResult> Details(int id)
     {
-        var product = await _context.Products.FindAsync(id);
-        if (product == null) return NotFound();
+        var product = await _productService.GetProductByIdAsync(id);
+        if (product == null)
+        {
+            return NotFound();
+        }
         return View(product);
     }
+
+    // Only Admin can create products
     [Authorize(Roles = "Admin")]
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
-        ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
+        ViewBag.Categories = new SelectList(await _categoryService.GetAllCategoriesAsync(), "Id", "Name");
         return View();
     }
 
+    // Only Admin can create products
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Create(CreateProductViewModel product)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(CreateProductViewModel productVm)
     {
         if (ModelState.IsValid)
         {
-            var userId = User.Identity.Name; 
-
-            Product newProduct = new Product()
+            var product = new Product
             {
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                CategoryId = product.CategoryId,
-                StockQuantity = product.StockQuantity,
-                ImageUrl = product.ImageUrl,
-                CreatedBy = userId
+                Name = productVm.Name,
+                Description = productVm.Description,
+                Price = productVm.Price,
+                CategoryId = productVm.CategoryId,
+                StockQuantity = productVm.StockQuantity,
+                ImageUrl = productVm.ImageUrl,
+                // Store the admin's username (or ID if you prefer)
+                CreatedBy = User.Identity.Name
             };
 
-            await _context.Products.AddAsync(newProduct);
-            await _context.SaveChangesAsync();
+            await _productService.CreateProductAsync(product);
             return RedirectToAction("Index");
         }
-
-        ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
-        return View(product);
+        ViewBag.Categories = new SelectList(await _categoryService.GetAllCategoriesAsync(), "Id", "Name", productVm.CategoryId);
+        return View(productVm);
     }
+
+    // Only Admin can edit products
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(int id)
     {
-        var product = await _context.Products.FindAsync(id);
-        if (product == null) return NotFound();
+        var product = await _productService.GetProductByIdAsync(id);
+        if (product == null)
+        {
+            return NotFound();
+        }
 
         var viewModel = new EditProductViewModel
         {
@@ -77,20 +93,28 @@ public class ProductController : Controller
             ImageUrl = product.ImageUrl
         };
 
-        ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
+        ViewBag.Categories = new SelectList(await _categoryService.GetAllCategoriesAsync(), "Id", "Name", product.CategoryId);
         return View(viewModel);
     }
 
+    // Only Admin can edit products
     [HttpPost]
     [Authorize(Roles = "Admin")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, EditProductViewModel model)
     {
-        if (id != model.Id) return BadRequest();
+        if (id != model.Id)
+        {
+            return BadRequest();
+        }
 
         if (ModelState.IsValid)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null) return NotFound();
+            var product = await _productService.GetProductByIdAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
 
             product.Name = model.Name;
             product.Description = model.Description;
@@ -99,31 +123,22 @@ public class ProductController : Controller
             product.CategoryId = model.CategoryId;
             product.ImageUrl = model.ImageUrl;
 
-            _context.Update(product);
-            await _context.SaveChangesAsync();
+            await _productService.UpdateProductAsync(product);
             return RedirectToAction("Index");
         }
 
-        ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name", model.CategoryId);
+        ViewBag.Categories = new SelectList(await _categoryService.GetAllCategoriesAsync(), "Id", "Name", model.CategoryId);
         return View(model);
     }
 
+    // Only Admin can delete products
     [Authorize(Roles = "Admin")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(int id)
     {
-        var product = await _context.Products.FindAsync(id);
-        if (product == null) return NotFound();
-
-        _context.Products.Remove(product);
-        await _context.SaveChangesAsync();
-
+        await _productService.DeleteProductAsync(id);
         TempData["SuccessMessage"] = "Product deleted successfully!";
         return RedirectToAction("Index");
     }
-
-
-
-
-
-
 }

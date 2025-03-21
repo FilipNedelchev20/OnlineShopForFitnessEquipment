@@ -1,19 +1,15 @@
-﻿using FitnessEquipmentShop.Data.Models.Entities;
+﻿using FitnessEquipmentShop.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
-[Authorize(Roles = "Admin")] 
+[Authorize(Roles = "Admin")]
 public class AdminController : Controller
 {
-    private readonly UserManager<User> _userManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly IAdminService _adminService;
 
-    public AdminController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+    public AdminController(IAdminService adminService)
     {
-        _userManager = userManager;
-        _roleManager = roleManager;
+        _adminService = adminService;
     }
 
     public IActionResult AssignRole()
@@ -24,16 +20,8 @@ public class AdminController : Controller
     [HttpPost]
     public async Task<IActionResult> AssignRole(string email, string role)
     {
-        var user = await _userManager.FindByEmailAsync(email);
-        if (user != null)
-        {
-            if (!await _roleManager.RoleExistsAsync(role))
-            {
-                await _roleManager.CreateAsync(new IdentityRole(role));
-            }
-            await _userManager.AddToRoleAsync(user, role);
-            ViewBag.Message = $"Role {role} assigned to {email}!";
-        }
+        var success = await _adminService.AssignRoleAsync(email, role);
+        ViewBag.Message = success ? $"Role {role} assigned to {email}!" : "User not found.";
         return View();
     }
 }
