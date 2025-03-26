@@ -1,94 +1,172 @@
-﻿    @using FitnessEquipmentShop.Web.ViewModel.Home
-    @model HomeViewModel
+﻿@using FitnessEquipmentShop.Web.ViewModel.Home
+@model HomeViewModel
 
-    @{
-        ViewData["Title"] = "Home Page";
-    }
+@{
+    ViewData["Title"] = "Home Page";
+}
 
-    <!-- Hero Section -->
-    <header class="hero-section position-relative text-center text-light d-flex align-items-center justify-content-center" style="height: 70vh; background: url('/images/banner.jpg') center/cover no-repeat;">
-        <!-- Dark Overlay for Better Text Contrast -->
-        <div class="overlay position-absolute w-100 h-100" style="background: rgba(0, 0, 0, 0.5); z-index: 0;"></div>
+<!-- Hero Carousel Section -->
+<div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+    <div class="carousel-inner">
+        <!-- Slide 1 -->
+        <div class="carousel-item active">
+            <video class="w-100 h-100" autoplay muted loop playsinline style="object-fit: cover;">
+                <source src="/videos/banner3.mp4" type="video/mp4">
+            </video>
+            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-between text-center text-white">
+                <div class="mt-4">
+                    <h1 class="display-3 fw-bold text-warning">Achieve Your Fitness Goals</h1>
+                    <p class="lead fw-bold text-warning">Top-quality equipment for your best workouts!</p>
+                </div>
 
-        <!-- Hero Content -->
-        <div class="container position-relative z-1">
-            <div class="hero-content text-white text-center">
-                <h1 class="display-3 fw-bold animate__animated animate__typing animate__delay-1s">Achieve Your Fitness Goals</h1>
-                <p class="lead animate__animated animate__fadeIn animate__delay-2s" style="font-size: 1.3rem;">Top-quality equipment for your best workouts!</p>
-                <a href="@Url.Action("Index", "Product")" class="btn btn-lg btn-primary shadow-lg px-5 py-3 fw-bold animate__animated animate__zoomIn animate__delay-2s">Shop Now 🛒</a>
+                <div class="mb-4">
+                    <a href="@Url.Action("Index", "Product")" class="btn btn-lg btn-primary px-5 py-3 fw-bold">Shop Now 🛒</a>
+                </div>
             </div>
         </div>
-    </header>
 
-    <!-- Top Rated Products Section -->
-    <section class="container mt-5">
-        <h2 class="text-center mb-4 fw-bold text-warning shadow-lg p-2 rounded-3">Top Rated Products 🏆</h2>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            @foreach (var product in Model.TopProducts)
-            {
-                <div class="col">
-                    <div class="card shadow-lg border-0 rounded-3" style="height: 400px;">
-                        <div class="position-relative">
-                            <img src="@product.ImageUrl" class="card-img-top img-fluid rounded-3" alt="@product.Name" style="height: 250px; object-fit: cover; border-radius: 15px 15px 0 0;">
+        <!-- Slide 2 -->
+        <div class="carousel-item">
+            <video class="w-100 h-100" autoplay muted loop playsinline style="object-fit: cover;">
+                <source src="/videos/banner2.mp4" type="video/mp4">
+            </video>
+            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-between text-center text-white">
+                <div class="mt-4">
+                    <h1 class="display-3 fw-bold text-warning">Share Your Experience</h1>
+                    <p class="lead fw-bold text-warning">Leave a review and let others know what you think!</p>
+                </div>
+                <div class="mb-4">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a href="@Url.Action("Index", "Product")" class="btn btn-lg btn-warning px-5 py-3 fw-bold">Leave Your Review</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-lg btn-warning px-5 py-3 fw-bold" asp-area="Identity" asp-page="/Account/Login">Leave Your Review</a>
+                    }
+                </div>
+            </div>
+        </div>
 
-                            <!-- Sticker: Most Popular -->
-                            <span class="badge bg-danger position-absolute top-0 start-0 m-3 fw-bold animate__animated animate__fadeInLeft">🔥 Most Popular</span>
-                        </div>
+        <!-- Slide 3 -->
+        <div class="carousel-item">
+            <video class="w-100 h-100" autoplay muted loop playsinline style="object-fit: cover;">
+                <source src="/videos/banner1.mp4" type="video/mp4">
+            </video>
+            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-between text-center text-white">
+                <div class="mt-4">
+                    <h1 class="display-3 fw-bold text-warning">Discover Your Favorites</h1>
+                    <p class="lead fw-bold text-warning">Find and save products you love!</p>
+                </div>
+                <div class="mb-4">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a href="@Url.Action("Index", "Product")" class="btn btn-lg text-white px-5 py-3 fw-bold" style="background-color: #ff69b4;">My Wishlist</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-lg text-white px-5 py-3 fw-bold" style="background-color: #ff69b4;" asp-area="Identity" asp-page="/Account/Login">My Wishlist</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 
-                        <!-- Card Body with Containers for Name and Price -->
-                        <div class="card-body p-4 d-flex flex-column justify-content-between">
-                            <!-- Product Name -->
-                            <h5 class="product-name text-dark fw-bold" style="font-size: 1.25rem; text-transform: uppercase;">@product.Name</h5>
+    <!-- Carousel Indicators at Bottom Right -->
+    <div class="carousel-indicators position-absolute bottom-0 end-0 mb-1 me-10">
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+    </div>
 
-                            <!-- Product Price -->
-                            <p class="product-price fw-bold text-success" style="font-size: 1.125rem;">$@product.Price</p>
+    <!-- Carousel Controls -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+</div>
 
-                            <!-- View Product Button -->
-                            <a href="@Url.Action("Details", "Product", new { id = product.Id })" class="btn btn-outline-warning btn-sm shadow-lg fw-bold animate__animated animate__pulse animate__infinite">View Product 👀</a>
-                        </div>
+<!-- Top Rated Products Section -->
+<section class="container mt-5">
+    <h2 class="text-center mb-4 fw-bold text-warning shadow-lg p-2 rounded-3">Top Rated Products 🏆</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var product in Model.TopProducts)
+        {
+            <div class="col">
+                <div class="card shadow-lg border-0 rounded-3" style="height: 400px;">
+                    <div class="position-relative">
+                        <img src="@product.ImageUrl" class="card-img-top img-fluid rounded-3" alt="@product.Name" style="height: 250px; object-fit: cover; border-radius: 15px 15px 0 0;">
+                        <span class="badge bg-danger position-absolute top-0 start-0 m-3 fw-bold animate__animated animate__fadeInLeft">🔥 Most Popular</span>
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column justify-content-between">
+                        <h5 class="product-name text-dark fw-bold" style="font-size: 1.25rem; text-transform: uppercase;">@product.Name</h5>
+                        <p class="product-price fw-bold text-success" style="font-size: 1.125rem;">$@product.Price</p>
+                        <a href="@Url.Action("Details", "Product", new { id = product.Id })" class="btn btn-outline-warning btn-sm shadow-lg fw-bold animate__animated animate__pulse animate__infinite">View Product 👀</a>
                     </div>
                 </div>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials-section my-5 bg-light text-center py-5">
+    <div class="container">
+        <h2 class="fw-bold text-primary mb-4 animate__animated animate__fadeInUp">What Our Customers Are Saying 💬</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card shadow-lg border-0 rounded-3">
+                    <div class="card-body">
+                        <p class="fs-5 text-muted">"Great equipment and excellent customer service! Highly recommend!"</p>
+                        <h5 class="fw-bold">John Doe</h5>
+                        <p class="text-warning">Verified Buyer</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-lg border-0 rounded-3">
+                    <div class="card-body">
+                        <p class="fs-5 text-muted">"The best home fitness equipment I’ve purchased in years!"</p>
+                        <h5 class="fw-bold">Jane Smith</h5>
+                        <p class="text-warning">Verified Buyer</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-lg border-0 rounded-3">
+                    <div class="card-body">
+                        <p class="fs-5 text-muted">"Fast shipping, great prices, and the equipment is top-notch."</p>
+                        <h5 class="fw-bold">Michael Johnson</h5>
+                        <p class="text-warning">Verified Buyer</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Include Animate.css and Bootstrap Icons (if not already in _Layout) -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var heroCarousel = document.getElementById('heroCarousel');
+        var carouselInstance = new bootstrap.Carousel(heroCarousel);
+        var pauseBtn = document.getElementById('carouselPauseBtn');
+        var isPaused = false;
+
+        pauseBtn.addEventListener('click', function () {
+            if (isPaused) {
+                carouselInstance.cycle();
+                pauseBtn.innerHTML = '<i class="bi bi-pause-fill"></i>';
+            } else {
+                carouselInstance.pause();
+                pauseBtn.innerHTML = '<i class="bi bi-play-fill"></i>';
             }
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section class="testimonials-section my-5 bg-light text-center py-5">
-        <div class="container">
-            <h2 class="fw-bold text-primary mb-4 animate__animated animate__fadeInUp">What Our Customers Are Saying 💬</h2>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card shadow-lg border-0 rounded-3">
-                        <div class="card-body">
-                            <p class="fs-5 text-muted">"Great equipment and excellent customer service! Highly recommend!"</p>
-                            <h5 class="fw-bold">John Doe</h5>
-                            <p class="text-warning">Verified Buyer</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card shadow-lg border-0 rounded-3">
-                        <div class="card-body">
-                            <p class="fs-5 text-muted">"The best home fitness equipment I’ve purchased in years!"</p>
-                            <h5 class="fw-bold">Jane Smith</h5>
-                            <p class="text-warning">Verified Buyer</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card shadow-lg border-0 rounded-3">
-                        <div class="card-body">
-                            <p class="fs-5 text-muted">"Fast shipping, great prices, and the equipment is top-notch."</p>
-                            <h5 class="fw-bold">Michael Johnson</h5>
-                            <p class="text-warning">Verified Buyer</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Include Animate.css library -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
-    <!-- Include Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+            isPaused = !isPaused;
+        });
+    });
+</script>
