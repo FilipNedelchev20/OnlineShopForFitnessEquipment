@@ -28,4 +28,8 @@
     <ProjectReference Include="..\FitnessEquipmentShop.Web.ViewModel\FitnessEquipmentShop.Web.ViewModel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\videos\" />
+  </ItemGroup>
+
 </Project>
