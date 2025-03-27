@@ -4,64 +4,75 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="card shadow-lg p-4" style="max-width: 450px; width: 100%;">
+        <div class="card-body">
+            <h2 class="text-center mb-3 text-primary fw-bold text-warning">Create an Account</h2>
+            <p class="text-center text-muted fw-bold">Join us and start your journey!</p>
+            <hr />
 
-<div class="row">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
-                <label asp-for="Input.Email"></label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.Password"></label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.ConfirmPassword"></label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.Email" class="form-label"></label>
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="Enter your email" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.Password" class="form-label"></label>
+                    <input asp-for="Input.Password" type="password" class="form-control" autocomplete="new-password" placeholder="Enter your password" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.ConfirmPassword" class="form-label"></label>
+                    <input asp-for="Input.ConfirmPassword" type="password" class="form-control" autocomplete="new-password" placeholder="Confirm password" />
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+
+                <button id="registerSubmit" type="submit" class="btn btn-primary w-100">Register</button>
+
+                <div class="text-center mt-3">
+                    <p class="text-muted">
+                        Already have an account?
+                        <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="text-decoration-none">Log in here</a>
+                    </p>
+                </div>
+            </form>
+
+            <hr class="my-4" />
+
+            <h5 class="text-center mb-3">Or sign up with</h5>
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
                 {
-                    <div>
+                    <div class="alert alert-warning text-center">
                         <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
+                            No external authentication services configured. See this
+                            <a href="https://go.microsoft.com/fwlink/?LinkID=532715">guide</a>.
                         </p>
                     </div>
                 }
                 else
                 {
-                    <form asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                        <div class="form-group">
-                            <button type="submit" name="provider" value="Google" class="social-login-btn">
-                                <img src="~/images/google-logo.png" alt="Google Login">
+                    <div class="d-flex justify-content-center gap-3">
+                        <form asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                            <button type="submit" name="provider" value="Google" class="btn btn-light border">
+                                <img src="~/images/google-logo.png" alt="Google Login" width="24" class="me-2"> Google
                             </button>
+                        </form>
 
-                         
-                            <button type="submit" name="provider" value="Facebook" class="social-login-btn">
-                                <img src="~/images/facebook-logo.png" alt="Facebook Login">
+                        <form asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                            <button type="submit" name="provider" value="Facebook" class="btn btn-light border">
+                                <img src="~/images/facebook-logo.png" alt="Facebook Login" width="24" class="me-2"> Facebook
                             </button>
-                        </div>
-                        
-                    </form>
+                        </form>
+                    </div>
                 }
             }
-        </section>
+        </div>
     </div>
 </div>
 
