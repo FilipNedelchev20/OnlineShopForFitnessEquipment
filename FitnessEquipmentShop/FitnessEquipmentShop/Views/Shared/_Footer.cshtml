@@ -1,26 +1,53 @@
-﻿<footer class="mt-5 bg-dark text-light py-4">
-    <div class="container text-center">
+﻿<footer class="mt-5 bg-dark text-light py-5">
+    <div class="container text-center text-md-start">
         <div class="row">
-            <div class="col-md-4">
-                <h5>About Us</h5>
-                <p>We provide high-quality fitness equipment to help you achieve your health goals.</p>
+            <!-- About Us Section -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold text-uppercase">About Us</h5>
+                <p class="small">We provide high-quality fitness equipment to help you achieve your health goals.</p>
             </div>
-            <div class="col-md-4">
-                <h5>Quick Links</h5>
-                <ul class="list-unstyled">
-                    <li><a href="@Url.Action("Index", "Home")" class="text-light">Home</a></li>
-                    <li><a href="@Url.Action("Index", "Product")" class="text-light">Products</a></li>
-                    <li><a href="@Url.Action("Contact", "Home")" class="text-light">Contact</a></li>
+
+            <!-- Quick Links Section -->
+            <div class="col-md-4 mb-4 d-flex flex-column align-items-center">
+                <h5 class="fw-bold text-uppercase">Quick Links</h5>
+                <ul class="list-unstyled text-center">
+                    <li><a href="@Url.Action("Index", "Home")" class="text-light text-decoration-none d-block py-1">🏠 Home</a></li>
+                    <li><a href="@Url.Action("Index", "Product")" class="text-light text-decoration-none d-block py-1">🛒 Products</a></li>
+                    <li><a href="@Url.Action("Contact", "Home")" class="text-light text-decoration-none d-block py-1">📞 Contact</a></li>
                 </ul>
             </div>
-            <div class="col-md-4">
-                <h5>Follow Us</h5>
-                <a href="#" class="text-light me-2"><i class="fab fa-facebook fa-lg"></i></a>
-                <a href="#" class="text-light me-2"><i class="fab fa-instagram fa-lg"></i></a>
-                <a href="#" class="text-light"><i class="fab fa-twitter fa-lg"></i></a>
+
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold text-uppercase">Follow Us</h5>
+                <a href="https://www.facebook.com/share/1BQsKtAjRT/" target="_blank" class="text-light me-2">
+                    <i class="bi bi-facebook fs-3"></i>
+                </a>
+                <a href="https://www.instagram.com/fitnessequipmentshop?igsh=azQ5aWdtbDR2dGd4" target="_blank" class="text-light me-2">
+                    <i class="bi bi-instagram fs-3"></i>
+                </a>
+                <a href="https://x.com/FitgearHub100?t=uL3LbL46VPeA2yvOYboypw&s=09" target="_blank" class="text-light">
+                    <i class="bi bi-twitter fs-3"></i>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Divider -->
+        <hr class="border-secondary my-4" />
+
+        <!-- Newsletter Subscription -->
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center">
+                <h6 class="fw-bold text-uppercase">Stay Updated!</h6>
+                <p class="small">Subscribe to our newsletter for the latest deals and news.</p>
+                <form class="d-flex justify-content-center">
+                    <input type="email" class="form-control me-2" placeholder="Enter your email" style="max-width: 250px;">
+                    <button class="btn btn-warning">Subscribe</button>
+                </form>
             </div>
         </div>
-        <hr class="border-secondary" />
-        <p class="mb-0">&copy; @DateTime.Now.Year - Fitness Shop. All rights reserved.</p>
+
+        <!-- Copyright Section -->
+        <p class="mt-4 small text-center mb-0">&copy; @DateTime.Now.Year - FitGear Hub. All rights reserved.</p>
     </div>
 </footer>
