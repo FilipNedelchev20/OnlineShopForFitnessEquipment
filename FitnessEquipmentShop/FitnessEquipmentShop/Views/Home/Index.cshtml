@@ -6,21 +6,34 @@
 }
 
 <!-- Hero Carousel Section -->
-<div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+<div id="heroCarousel" class="carousel slide position-relative" data-bs-ride="carousel" data-bs-interval="5000">
     <div class="carousel-inner">
         <!-- Slide 1 -->
         <div class="carousel-item active">
             <video class="w-100 h-100" autoplay muted loop playsinline style="object-fit: cover;">
                 <source src="/videos/banner3.mp4" type="video/mp4">
+                Your browser does not support the video tag.
             </video>
             <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-between text-center text-white">
                 <div class="mt-4">
                     <h1 class="display-3 fw-bold text-warning">Achieve Your Fitness Goals</h1>
                     <p class="lead fw-bold text-warning">Top-quality equipment for your best workouts!</p>
                 </div>
-
-                <div class="mb-4">
-                    <a href="@Url.Action("Index", "Product")" class="btn btn-lg btn-primary px-5 py-3 fw-bold">Shop Now 🛒</a>
+                <!-- Increased bottom margin to move the button up -->
+                <div style="margin-bottom: 7rem;">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a href="@Url.Action("Index", "Product")" class="btn btn-lg btn-primary px-5 py-3 fw-bold">Shop Now 🛒</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-lg btn-primary px-5 py-3 fw-bold"
+                           asp-area="Identity"
+                           asp-page="/Account/Login"
+                           asp-route-returnUrl="@Context.Request.Path">
+                            Shop Now 🛒
+                        </a>
+                    }
                 </div>
             </div>
         </div>
@@ -29,20 +42,26 @@
         <div class="carousel-item">
             <video class="w-100 h-100" autoplay muted loop playsinline style="object-fit: cover;">
                 <source src="/videos/banner2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
             </video>
             <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-between text-center text-white">
                 <div class="mt-4">
                     <h1 class="display-3 fw-bold text-warning">Share Your Experience</h1>
                     <p class="lead fw-bold text-warning">Leave a review and let others know what you think!</p>
                 </div>
-                <div class="mb-4">
+                <div style="margin-bottom: 7rem;">
                     @if (User.Identity.IsAuthenticated)
                     {
                         <a href="@Url.Action("Index", "Product")" class="btn btn-lg btn-warning px-5 py-3 fw-bold">Leave Your Review</a>
                     }
                     else
                     {
-                        <a class="btn btn-lg btn-warning px-5 py-3 fw-bold" asp-area="Identity" asp-page="/Account/Login">Leave Your Review</a>
+                        <a class="btn btn-lg btn-warning px-5 py-3 fw-bold"
+                           asp-area="Identity"
+                           asp-page="/Account/Login"
+                           asp-route-returnUrl="@Context.Request.Path">
+                            Leave Your Review
+                        </a>
                     }
                 </div>
             </div>
@@ -52,39 +71,49 @@
         <div class="carousel-item">
             <video class="w-100 h-100" autoplay muted loop playsinline style="object-fit: cover;">
                 <source src="/videos/banner1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
             </video>
             <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-between text-center text-white">
                 <div class="mt-4">
                     <h1 class="display-3 fw-bold text-warning">Discover Your Favorites</h1>
                     <p class="lead fw-bold text-warning">Find and save products you love!</p>
                 </div>
-                <div class="mb-4">
+                <div style="margin-bottom: 7rem;">
                     @if (User.Identity.IsAuthenticated)
                     {
                         <a href="@Url.Action("Index", "Product")" class="btn btn-lg text-white px-5 py-3 fw-bold" style="background-color: #ff69b4;">My Wishlist</a>
                     }
                     else
                     {
-                        <a class="btn btn-lg text-white px-5 py-3 fw-bold" style="background-color: #ff69b4;" asp-area="Identity" asp-page="/Account/Login">My Wishlist</a>
+                        <a class="btn btn-lg text-white px-5 py-3 fw-bold"
+                           style="background-color: #ff69b4;"
+                           asp-area="Identity"
+                           asp-page="/Account/Login"
+                           asp-route-returnUrl="@Context.Request.Path">
+                            My Wishlist
+                        </a>
                     }
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Carousel Indicators at Bottom Right -->
-    <div class="carousel-indicators position-absolute bottom-0 end-0 mb-1 me-10">
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+    <div class="carousel-indicators position-absolute bottom-0 end-0 mb-5 me-9">
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
     </div>
+
+
 
     <!-- Carousel Controls -->
     <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
         <span class="carousel-control-prev-icon"></span>
+        <span class="visually-hidden">Previous</span>
     </button>
     <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
         <span class="carousel-control-next-icon"></span>
+        <span class="visually-hidden">Next</span>
     </button>
 </div>
 
@@ -151,22 +180,20 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var heroCarousel = document.getElementById('heroCarousel');
-        var carouselInstance = new bootstrap.Carousel(heroCarousel);
-        var pauseBtn = document.getElementById('carouselPauseBtn');
-        var isPaused = false;
+<!-- Custom CSS for Bigger, Thicker Indicators -->
+<style>
+    .carousel-indicators button {
+        width: 25px;
+        height: 25px;
+        background-color: #fff;
+        opacity: 0.6;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        transition: opacity 0.3s, transform 0.3s;
+    }
 
-        pauseBtn.addEventListener('click', function () {
-            if (isPaused) {
-                carouselInstance.cycle();
-                pauseBtn.innerHTML = '<i class="bi bi-pause-fill"></i>';
-            } else {
-                carouselInstance.pause();
-                pauseBtn.innerHTML = '<i class="bi bi-play-fill"></i>';
-            }
-            isPaused = !isPaused;
-        });
-    });
-</script>
+    .carousel-indicators .active {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+</style>
