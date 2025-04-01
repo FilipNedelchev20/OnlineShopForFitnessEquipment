@@ -20,14 +20,25 @@ namespace FitnessEquipmentShop.Services
             return await _context.CartItems.Include(c => c.Product).ToListAsync();
         }
 
-        public async Task AddToCartAsync(int productId)
+        public async Task AddToCartAsync(int productId, string userId)
         {
+            // Ensure product exists (optional)
             var product = await _context.Products.FindAsync(productId);
-            if (product == null) return;
-            var cartItem = new CartItem { ProductId = productId };
+            if (product == null)
+                return;
+
+            // Create cart item with the current userId
+            var cartItem = new CartItem
+            {
+                ProductId = productId,
+                UserId = userId,
+                Quantity = 1
+            };
+
             await _context.CartItems.AddAsync(cartItem);
             await _context.SaveChangesAsync();
         }
+
 
         public async Task RemoveFromCartAsync(int cartItemId)
         {
