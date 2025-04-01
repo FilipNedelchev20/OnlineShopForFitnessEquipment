@@ -1,84 +1,104 @@
-﻿<nav class="navbar navbar-expand-lg sticky-top navbar-dark">
-    <div class="container">
-        <a class="navbar-brand" href="@Url.Action("Index", "Home")">
+﻿<nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark shadow-sm">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <!-- Logo & Brand (Push Left) -->
+        <a class="navbar-brand d-flex align-items-center me-auto" href="@Url.Action("Index", "Home")">
             <img src="~/images/logo.png" alt="FitGear Hub" height="40" class="me-2" />
-            FitGear Hub
+            <span class="fw-bold">FitGear Hub</span>
         </a>
+
+        <!-- Navbar Toggler (Mobile) -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
+
+        <!-- Navbar Links -->
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav">
                 @if (User.Identity.IsAuthenticated)
                 {
                     <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Index", "Product")">Products</a>
+                        <a class="nav-link fw-bold" href="@Url.Action("Index", "Product")">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Index", "Category")">Categories</a>
+                        <a class="nav-link fw-bold" href="@Url.Action("Index", "Category")">Categories</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Index", "Cart")">Cart</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Index", "Wishlist")">Wishlist</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Index", "Order")">My Orders</a>
-                    </li>
-                }
-            </ul>
-            @using FitnessEquipmentShop.Data.Models.Entities
-            @using Microsoft.AspNetCore.Identity
-            @inject SignInManager<User> SignInManager
-            @inject UserManager<User> UserManager
-            <ul class="navbar-nav">
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    var currentUser = await UserManager.GetUserAsync(User);
-                    var isAdmin = await UserManager.IsInRoleAsync(currentUser, "Admin");
-
-                    <li class="nav-item">
-                        <span class="navbar-text text-white me-3">
-                            Welcome, @User.Identity.Name!
-                        </span>
-                    </li>
-
-                    @if (isAdmin)
-                    {
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="adminDropdown"
-                               role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Admin Panel
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="adminDropdown">
-                                <li><a class="dropdown-item" href="@Url.Action("Create", "Product")">Add Product</a></li>
-                                <li><a class="dropdown-item" href="@Url.Action("Create", "Category")">Add Category</a></li>
-                                <li><a class="dropdown-item" href="@Url.Action("AssignRole", "Admin")">Manage Users</a></li>
-                            </ul>
-                        </li>
-                    }
-
-                    <li class="nav-item">
-                        <form method="post" asp-area="Identity" asp-page="/Account/Logout" class="d-inline">
-                            <button type="submit" class="btn btn-danger ms-2">Logout</button>
-                        </form>
-                    </li>
-                }
-                else
-                {
-                    <li class="nav-item">
-                        <a class="btn btn-outline-light me-2" asp-area="Identity" asp-page="/Account/Login">
-                            Login
+                        <a class="nav-link fw-bold" href="@Url.Action("Index", "Cart")">
+                            <i class="fas fa-shopping-cart"></i>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-light" asp-area="Identity" asp-page="/Account/Register">
-                            Register
+                        <a class="nav-link fw-bold" href="@Url.Action("Index", "Wishlist")">
+                            <i class="fas fa-heart"></i> Wishlist
                         </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold" href="@Url.Action("Index", "Order")">My Orders</a>
                     </li>
                 }
             </ul>
         </div>
+
+        <!-- User Info & Logout (Push Right) -->
+        <div class="d-flex align-items-center ms-auto">
+            @using FitnessEquipmentShop.Data.Models.Entities
+            @using Microsoft.AspNetCore.Identity
+            @inject SignInManager<User> SignInManager
+            @inject UserManager<User> UserManager
+
+            @if (SignInManager.IsSignedIn(User))
+            {
+                var currentUser = await UserManager.GetUserAsync(User);
+                var isAdmin = await UserManager.IsInRoleAsync(currentUser, "Admin");
+
+                @if (isAdmin)
+                {
+                    <div class="dropdown me-3">
+                        <a class="nav-link dropdown-toggle fw-bold text-white" href="#" id="adminDropdown"
+                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Admin Panel
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="adminDropdown">
+                            <li><a class="dropdown-item" href="@Url.Action("Create", "Product")">Add Product</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("Create", "Category")">Add Category</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("AssignRole", "Admin")">Manage Users</a></li>
+                        </ul>
+                    </div>
+                }
+
+                <span class="navbar-text text-white fw-bold me-3">
+                    Welcome, @User.Identity.Name!
+                </span>
+
+               
+
+                <form method="post" asp-area="Identity" asp-page="/Account/Logout" class="d-inline">
+                    <button type="submit" class="btn btn-danger">Logout</button>
+                </form>
+            }
+            else
+            {
+                <a class="btn btn-outline-light me-2 fw-bold" asp-area="Identity" asp-page="/Account/Login">
+                    Login
+                </a>
+                <a class="btn btn-warning fw-bold text-dark" asp-area="Identity" asp-page="/Account/Register">
+                    Register
+                </a>
+            }
+        </div>
     </div>
 </nav>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var dropdown = document.querySelector(".dropdown");
+        dropdown.addEventListener("mouseover", function () {
+            var menu = dropdown.querySelector(".dropdown-menu");
+            menu.classList.add("show");
+        });
+        dropdown.addEventListener("mouseleave", function () {
+            var menu = dropdown.querySelector(".dropdown-menu");
+            menu.classList.remove("show");
+        });
+    });
+</script>
