@@ -4,137 +4,89 @@
     ViewData["Title"] = "Products";
 }
 
-<h2>All products</h2>
+<section class="container mt-5">
+    <h2 class="text-center mb-4 fw-bold text-warning shadow-lg p-2 rounded-3">All Products 🛍️</h2>
 
-<div aria-live="polite" aria-atomic="true" style="position: relative;">
-    <div id="successToast" class="toast position-fixed top-0 end-0 m-3 bg-success text-white"
-         role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
-        <div class="toast-header">
-            <strong class="me-auto">Success</strong>
-            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="toast-body">
-            Product deleted successfully!
+    <div aria-live="polite" aria-atomic="true" class="position-relative">
+        <div id="successToast" class="toast position-fixed top-0 end-0 m-3 bg-success text-white"
+             role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+            <div class="toast-header">
+                <strong class="me-auto">Success</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">Product deleted successfully!</div>
         </div>
     </div>
-</div>
 
-<div class="row">
-    @foreach (var product in Model)
-    {
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
-                <div class="card-body">
-                    <h5 class="card-title">@product.Name</h5>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var product in Model)
+        {
+            <div class="col">
+                <div class="card shadow-lg border-0 rounded-3" style="height: 450px;">
+                    <div class="position-relative">
+                        <img src="@product.ImageUrl" class="card-img-top img-fluid rounded-3" alt="@product.Name"
+                             style="height: 250px; object-fit: cover; border-radius: 15px 15px 0 0;">
+                        <span class="badge bg-primary position-absolute top-0 start-0 m-3 fw-bold animate__animated animate__fadeInLeft">✨ New</span>
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column justify-content-between">
+                        <h5 class="product-name text-dark fw-bold" style="font-size: 1.25rem; text-transform: uppercase;">@product.Name</h5>
 
-                    <p class="card-text short-desc">
-                        @product.Description.Substring(0, Math.Min(product.Description.Length, 100))...
-                    </p>
+                        <p class="product-price fw-bold text-success" style="font-size: 1.125rem;">$@product.Price</p>
 
-                    <p class="card-text full-desc d-none">
-                        @product.Description
-                    </p>
+                        <div class="d-flex gap-2">
+                            <a href="@Url.Action("Details", "Product", new { id = product.Id })"
+                               class="btn btn-outline-warning btn-sm shadow-lg fw-bold animate__animated animate__pulse animate__infinite">Details 👀</a>
+                            <a href="@Url.Action("Add", "Cart", new { productId = product.Id })"
+                               class="btn btn-success btn-sm shadow-lg fw-bold">Add to Cart 🛒</a>
+                        </div>
 
-                    @if (product.Description.Length > 100)
-                    {
-                        <button class="btn btn-link toggle-desc">Read More</button>
-                    }
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <div class="mt-2 d-flex gap-2">
+                                <a href="@Url.Action("Edit", "Product", new { id = product.Id })" class="btn btn-warning btn-sm shadow-lg fw-bold">Edit ✏️</a>
+                                <button class="btn btn-danger btn-sm shadow-lg fw-bold" data-bs-toggle="modal" data-bs-target="#deleteModal-@product.Id">
+                                    Delete 🗑️
+                                </button>
+                            </div>
 
-                    <p class="card-text"><strong>Price:</strong> @product.Price lv.</p>
-                    <a href="@Url.Action("Details", "Product", new { id = product.Id })" class="btn btn-primary">Details</a>
-                    <a href="@Url.Action("Add", "Cart", new { productId = product.Id })" class="btn btn-success">Add to cart</a>
-
-                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                    {
-                        <a href="@Url.Action("Edit", "Product", new { id = product.Id })" class="btn btn-warning">Edit</a>
-                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-@product.Id">
-                            Delete
-                        </button>
-                        <div class="modal fade" id="deleteModal-@product.Id" tabindex="-1" aria-labelledby="deleteModalLabel-@product.Id" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="deleteModalLabel-@product.Id">Confirm Delete</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Are you sure you want to delete <strong>@product.Name</strong>?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                        <form method="post" action="@Url.Action("Delete", "Product", new { id = product.Id })">
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                        </form>
-
-
-
-
+                            <!-- Delete Confirmation Modal -->
+                            <div class="modal fade" id="deleteModal-@product.Id" tabindex="-1" aria-labelledby="deleteModalLabel-@product.Id" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Confirm Delete</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete <strong>@product.Name</strong>?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <form method="post" action="@Url.Action("Delete", "Product", new { id = product.Id })">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    }
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
-    }
-</div>
-
-
+        }
+    </div>
+</section>
 
 @section Scripts {
     <script>
         $(document).ready(function () {
-
-            $('#deleteModal').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget);
-                var productId = button.data('id');
-                var productName = button.data('name');
-
-                $('#productName').text(productName);
-                $('#deleteProductId').val(productId);
-                $('#deleteForm').attr('action', '/Product/Delete');
-            });
-
             var successMessage = '@TempData["SuccessMessage"]';
             if (successMessage) {
                 var toastEl = $('#successToast');
                 toastEl.find('.toast-body').text(successMessage);
                 toastEl.toast('show');
             }
-
-            $(".toggle-desc").click(function () {
-                var button = $(this);
-                var cardBody = button.closest(".card-body");
-
-                var shortDesc = cardBody.find(".short-desc");
-                var fullDesc = cardBody.find(".full-desc");
-
-                var isExpanded = button.attr("data-state") === "expanded";
-
-                if (isExpanded) {
-                     fullDesc.stop(true, true).slideUp(300, function () {
-                     shortDesc.stop(true, true).fadeIn(200);
-                    });
-                 button.text("Read More").attr("data-state", "collapsed");
-                } else {
-                  shortDesc.stop(true, true).fadeOut(200);
-                  fullDesc.stop(true, true).removeClass("d-none").hide().slideDown(300);
-                     button.text("Read Less").attr("data-state", "expanded");
-                }
-            });
-
-
-
-
-
         });
     </script>
-
 }
-
-
