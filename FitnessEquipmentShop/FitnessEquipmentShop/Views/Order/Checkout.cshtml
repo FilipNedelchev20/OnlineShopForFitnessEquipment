@@ -28,14 +28,14 @@ else
                 <tr>
                     <td>@item.Product.Name</td>
                     <td>@item.Quantity</td>
-                    <td>$@item.Product.Price</td>
-                    <td>$@(item.Quantity * item.Product.Price)</td>
+                    <td>lv.@item.Product.Price</td>
+                    <td>lv.@(item.Quantity * item.Product.Price)</td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <h4>Total: $@Model.TotalPrice</h4>
+    <h4>Total: lv.@Model.TotalPrice</h4>
 
     <form asp-action="PlaceOrder" method="post">
         <h3>Shipping Address</h3>
