@@ -1,5 +1,6 @@
 ﻿using FitnessEquipmentShop.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 public class WishlistController : Controller
@@ -18,9 +19,16 @@ public class WishlistController : Controller
 
     public async Task<IActionResult> Add(int productId)
     {
-        await _wishlistService.AddToWishlistAsync(productId);
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Взема текущия UserId
+        if (userId == null)
+        {
+            return Unauthorized(); // Или редирект към Login
+        }
+
+        await _wishlistService.AddToWishlistAsync(productId, userId);
         return RedirectToAction("Index");
     }
+
 
     public async Task<IActionResult> Remove(int id)
     {
