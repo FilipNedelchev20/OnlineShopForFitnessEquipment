@@ -1,0 +1,54 @@
+﻿@model FitnessEquipmentShop.Web.ViewModel.ReviewViewModel
+
+@{
+    ViewData["Title"] = "Edit Review";
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<section class="container my-5">
+    <h2 class="text-center fw-bold text-primary mb-4">Edit Your Review ✍️</h2>
+
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="ProductId" />
+
+        <div class="mb-3">
+            <label asp-for="Comment" class="form-label">Your Review</label>
+            <textarea asp-for="Comment" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Comment" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Rating</label>
+            <div id="starRatingEdit">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    var starClass = i <= Model.Rating ? "fa-star text-warning" : "fa-star-o text-warning";
+                    <i class="fa star-edit @starClass" data-value="@i" style="font-size: 2rem; cursor: pointer;"></i>
+                }
+            </div>
+            <input type="hidden" asp-for="Rating" />
+            <span asp-validation-for="Rating" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-success btn-lg px-4">Update Review ✅</button>
+        <a asp-controller="Product" asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-secondary btn-lg px-4">Cancel</a>
+    </form>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.star-edit').click(function () {
+                var rating = $(this).data('value');
+                $('input[name="Rating"]').val(rating);
+                $('.star-edit').each(function () {
+                    var val = $(this).data('value');
+                    $(this).removeClass('fa-star fa-star-o');
+                    $(this).addClass(val <= rating ? 'fa-star text-warning' : 'fa-star-o text-warning');
+                });
+            });
+        });
+    </script>
+}
