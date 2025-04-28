@@ -1,0 +1,76 @@
+﻿@using FitnessEquipmentShop.Data.Models.Entities
+@model List<User>
+
+@{
+    ViewData["Title"] = "Manage Users";
+    var roles = ViewBag.Roles as List<string>;
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Manage Users</h2>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success">@TempData["Message"]</div>
+    }
+
+    <div class="card shadow-sm p-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-primary">
+                    <tr>
+                        <th>#</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Assign Role</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@Model.IndexOf(user) + 1</td>
+                            <td>@user.FullName</td>
+                            <td>@user.Email</td>
+                            <td>
+                                <form method="post" asp-action="AssignRole" class="d-flex">
+                                    <input type="hidden" name="userId" value="@user.Id" />
+
+                                    <select name="role" class="form-select me-2" required>
+                                        <option value="">Select Role</option>
+                                        @foreach (var role in roles)
+                                        {
+                                            <option value="@role">@role</option>
+                                        }
+                                    </select>
+
+                                    <button type="submit" class="btn btn-success">
+                                        Assign
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <!-- Future: Maybe Add Remove Role? -->
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Bonus smooth animation -->
+<style>
+    .card {
+        border-radius: 1rem;
+        background: #ffffffcc;
+        backdrop-filter: blur(8px);
+    }
+
+    table tbody tr:hover {
+        background-color: #f0f8ff;
+        transition: background-color 0.3s ease;
+    }
+</style>
