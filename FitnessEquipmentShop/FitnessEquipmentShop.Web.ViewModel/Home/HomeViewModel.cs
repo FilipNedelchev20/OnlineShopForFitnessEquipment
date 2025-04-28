@@ -1,4 +1,5 @@
 ﻿using FitnessEquipmentShop.Data.Models.Entities;
+using FitnessEquipmentShop.Web.ViewModel.Category;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace FitnessEquipmentShop.Web.ViewModel.Home
 {
     public class HomeViewModel
     {
-        public List<ProductViewModel> TopProducts { get; set; } = new List<ProductViewModel>();
+        public IEnumerable<ProductViewModel> TopProducts { get; set; }
+
+        public IEnumerable<CategoryViewModel> TopCategories { get; set; }
     }
 }
