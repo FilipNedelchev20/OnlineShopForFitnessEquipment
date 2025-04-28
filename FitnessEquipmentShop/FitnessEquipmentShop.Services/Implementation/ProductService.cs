@@ -21,8 +21,10 @@ namespace FitnessEquipmentShop.Services
 
         public async Task<Product> GetProductByIdAsync(int id)
         {
-            return await _context.Products.Include(p => p.Category)
-                                          .FirstOrDefaultAsync(p => p.Id == id);
+            return await _context.Products
+                .Include(p => p.Reviews)
+                    .ThenInclude(r => r.User)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task CreateProductAsync(Product product)
