@@ -1,5 +1,6 @@
 ﻿using FitnessEquipmentShop.Data.Models.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace FitnessEquipmentShop.Services
@@ -15,9 +16,19 @@ namespace FitnessEquipmentShop.Services
             _roleManager = roleManager;
         }
 
-        public async Task<bool> AssignRoleAsync(string email, string role)
+        public async Task<List<User>> GetAllUsersAsync()
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            return await _userManager.Users.ToListAsync();
+        }
+
+        public async Task<List<string>> GetAllRolesAsync()
+        {
+            return await _roleManager.Roles.Select(r => r.Name).ToListAsync();
+        }
+
+        public async Task<bool> AssignRoleByIdAsync(string userId, string role)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
             if (user == null) return false;
 
             if (!await _roleManager.RoleExistsAsync(role))
@@ -28,5 +39,6 @@ namespace FitnessEquipmentShop.Services
             await _userManager.AddToRoleAsync(user, role);
             return true;
         }
+
     }
 }
