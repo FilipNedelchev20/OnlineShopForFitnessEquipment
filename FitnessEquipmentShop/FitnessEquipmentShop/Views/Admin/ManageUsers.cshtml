@@ -1,76 +1,269 @@
-﻿@using FitnessEquipmentShop.Data.Models.Entities
-@model List<User>
+﻿@model List<ManageUserViewModel>
 
 @{
     ViewData["Title"] = "Manage Users";
-    var roles = ViewBag.Roles as List<string>;
 }
-
-<div class="container mt-5">
+<div class="mb-3">
+    <a href="@Url.Action("Index", "Home")" class="btn btn-light shadow-lg fw-bold">
+        ⬅️ Back to Home
+    </a>
+</div>
+<div class="container py-4">
     <h2 class="mb-4 text-center">Manage Users</h2>
 
-    @if (TempData["Message"] != null)
+    @if (ViewBag.Message != null)
     {
-        <div class="alert alert-success">@TempData["Message"]</div>
+        <div class="alert alert-success text-center" id="messageToast">
+            @ViewBag.Message
+        </div>
     }
 
-    <div class="card shadow-sm p-4">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="table-primary">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <input id="searchInput" type="text" class="form-control w-50" placeholder="Search by email...">
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-striped table-bordered text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>
+                        Email
+                        <button type="button" class="btn btn-sm btn-light ms-2" id="sortButton" title="Sort by email">
+                            <i class="bi bi-sort-alpha-down"></i>
+                        </button>
+                    </th>
+                    <th>Roles</th>
+                    <th>Registration Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="usersTable">
+                @foreach (var user in Model)
+                {
                     <tr>
-                        <th>#</th>
-                        <th>Full Name</th>
-                        <th>Email</th>
-                        <th>Assign Role</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var user in Model)
-                    {
-                        <tr>
-                            <td>@Model.IndexOf(user) + 1</td>
-                            <td>@user.FullName</td>
-                            <td>@user.Email</td>
-                            <td>
-                                <form method="post" asp-action="AssignRole" class="d-flex">
-                                    <input type="hidden" name="userId" value="@user.Id" />
-
-                                    <select name="role" class="form-select me-2" required>
-                                        <option value="">Select Role</option>
-                                        @foreach (var role in roles)
-                                        {
-                                            <option value="@role">@role</option>
-                                        }
-                                    </select>
-
-                                    <button type="submit" class="btn btn-success">
-                                        Assign
-                                    </button>
+                        <td>@user.Email</td>
+                        <td>
+                            @if (user.Roles.Any())
+                            {
+                                @string.Join(", ", user.Roles)
+                            }
+                            else
+                            {
+                                <span class="text-muted">No Roles</span>
+                            }
+                        </td>
+                        <td>@user.RegisteredOn.ToShortDateString()</td>
+                        <td>
+                            @if (user.IsLockedOut)
+                            {
+                                <span class="badge bg-danger">Locked</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#assignRoleModal" data-email="@user.Email">Assign Role</button>
+                            <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#removeRolesModal" data-email="@user.Email">Remove Roles</button>
+                            @if (user.IsLockedOut)
+                            {
+                                <form method="post" asp-action="UnlockUser" style="display:inline;">
+                                    <input type="hidden" name="email" value="@user.Email" />
+                                    <button type="submit" class="btn btn-sm btn-success">Unlock User</button>
                                 </form>
-                            </td>
-                            <td>
-                                <!-- Future: Maybe Add Remove Role? -->
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                            }
+                            else
+                            {
+                                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#lockUserModal" data-email="@user.Email">Lock User</button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <nav>
+        <ul class="pagination justify-content-center" id="pagination"></ul>
+    </nav>
+</div>
+
+<!-- Loader -->
+<div id="loader" class="d-none text-center">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<!-- Assign Role Modal -->
+<div class="modal fade" id="assignRoleModal" tabindex="-1" aria-labelledby="assignRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-controller="Admin" asp-action="AssignRole" id="assignRoleForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="assignRoleModalLabel">Assign Role</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="email" id="assignRoleEmail" />
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Role:</label>
+                        <input type="text" name="role" class="form-control" placeholder="Admin/User" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Assign</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
-<!-- Bonus smooth animation -->
-<style>
-    .card {
-        border-radius: 1rem;
-        background: #ffffffcc;
-        backdrop-filter: blur(8px);
-    }
+<!-- Remove Roles Modal -->
+<div class="modal fade" id="removeRolesModal" tabindex="-1" aria-labelledby="removeRolesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-action="RemoveAllRoles" id="removeRolesForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="removeRolesModalLabel">Remove All Roles</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="email" id="removeRolesEmail" />
+                    <p>Are you sure you want to remove <strong>all roles</strong> from this user?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Remove All</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-    table tbody tr:hover {
-        background-color: #f0f8ff;
-        transition: background-color 0.3s ease;
-    }
-</style>
+<!-- Lock User Modal -->
+<div class="modal fade" id="lockUserModal" tabindex="-1" aria-labelledby="lockUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-action="LockUser" id="lockUserForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="lockUserModalLabel">Lock User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="email" id="lockUserEmail" />
+                    <div class="mb-3">
+                        <label for="lockDuration" class="form-label">Lock Duration (in minutes):</label>
+                        <input type="number" name="lockDuration" class="form-control" placeholder="e.g., 30" required min="1" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-warning">Lock</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+@section Scripts {
+    <script>
+        // Live Search
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const value = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#usersTable tr');
+            rows.forEach(row => {
+                const email = row.querySelector('td:first-child').innerText.toLowerCase();
+                row.style.display = email.includes(value) ? '' : 'none';
+            });
+        });
+
+        // Sort Emails
+        document.getElementById('sortButton').addEventListener('click', function () {
+            const table = document.querySelector('#usersTable');
+            const rows = Array.from(table.querySelectorAll('tr'));
+            const isAsc = this.classList.toggle('asc');
+            rows.sort((a, b) => {
+                const emailA = a.querySelector('td:first-child').innerText.toLowerCase();
+                const emailB = b.querySelector('td:first-child').innerText.toLowerCase();
+                return isAsc ? emailA.localeCompare(emailB) : emailB.localeCompare(emailA);
+            });
+            rows.forEach(row => table.appendChild(row));
+        });
+
+        // Pagination
+        const rowsPerPage = 10;
+        const rows = document.querySelectorAll('#usersTable tr');
+        const pagination = document.getElementById('pagination');
+
+        function showPage(page) {
+            rows.forEach((row, index) => {
+                row.style.display = (index >= (page - 1) * rowsPerPage && index < page * rowsPerPage) ? '' : 'none';
+            });
+        }
+
+        function setupPagination() {
+            pagination.innerHTML = '';
+            const pageCount = Math.ceil(rows.length / rowsPerPage);
+            for (let i = 1; i <= pageCount; i++) {
+                const li = document.createElement('li');
+                li.classList.add('page-item');
+                li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                li.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    showPage(i);
+                    document.querySelectorAll('.page-item').forEach(item => item.classList.remove('active'));
+                    li.classList.add('active');
+                });
+                pagination.appendChild(li);
+            }
+            if (pagination.firstChild) pagination.firstChild.classList.add('active');
+        }
+
+        setupPagination();
+        showPage(1);
+
+        // Pass Email to Modals
+        var assignModal = document.getElementById('assignRoleModal');
+        assignModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var email = button.getAttribute('data-email');
+            var input = assignModal.querySelector('#assignRoleEmail');
+            input.value = email;
+        });
+
+        var removeModal = document.getElementById('removeRolesModal');
+        removeModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var email = button.getAttribute('data-email');
+            var input = removeModal.querySelector('#removeRolesEmail');
+            input.value = email;
+        });
+
+        var lockModal = document.getElementById('lockUserModal');
+        lockModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var email = button.getAttribute('data-email');
+            var input = lockModal.querySelector('#lockUserEmail');
+            input.value = email;
+        });
+
+        // Show Loader on Form Submit
+        document.getElementById('assignRoleForm').addEventListener('submit', function () {
+            document.getElementById('loader').classList.remove('d-none');
+        });
+
+        document.getElementById('removeRolesForm').addEventListener('submit', function () {
+            document.getElementById('loader').classList.remove('d-none');
+        });
+
+        document.getElementById('lockUserForm').addEventListener('submit', function () {
+            document.getElementById('loader').classList.remove('d-none');
+        });
+    </script>
+}
+</div>
