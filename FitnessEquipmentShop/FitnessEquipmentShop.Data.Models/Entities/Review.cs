@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace FitnessEquipmentShop.Data.Models.Entities
@@ -14,14 +15,16 @@ namespace FitnessEquipmentShop.Data.Models.Entities
         public int Id { get; set; }
 
 
-        [ForeignKey(nameof(ProductId))]
+        [JsonIgnore]
         public Product Product { get; set; }
         [Required]
+        [ForeignKey(nameof(Product))]
         public int ProductId { get; set; }
 
-        [ForeignKey(nameof(UserId))]
+        [JsonIgnore]
         public User User { get; set; }
         [Required]
+        [ForeignKey(nameof(User))]
         public string UserId { get; set; }
 
         [Required]
@@ -31,7 +34,7 @@ namespace FitnessEquipmentShop.Data.Models.Entities
         [StringLength(1000)]
         public string Comment { get; set; }
 
-        [Required]
-        public DateTime DatePosted { get; set; }
+        //[Required]
+        //public DateTime DatePosted { get; set; }
     }
 }
