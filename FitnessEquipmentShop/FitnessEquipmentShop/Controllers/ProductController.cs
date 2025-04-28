@@ -71,6 +71,15 @@ public class ProductController : Controller
         ViewBag.Categories = new SelectList(await _categoryService.GetAllCategoriesAsync(), "Id", "Name", productVm.CategoryId);
         return View(productVm);
     }
+    public async Task<IActionResult> ByCategory(int categoryId)
+    {
+        var products = await _productService.GetAllProductsAsync();
+        var filteredProducts = products
+            .Where(p => p.CategoryId == categoryId)
+            .ToList();
+
+        return View("Index", filteredProducts); // Използваме същия view за продукти
+    }
 
     // Only Admin can edit products
     [Authorize(Roles = "Admin")]
