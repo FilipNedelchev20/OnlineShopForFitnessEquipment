@@ -1,26 +1,154 @@
 ﻿@model FitnessEquipmentShop.Data.Models.Entities.Product
 
 @{
-    ViewData["Title"] = @Model.Name;
+    ViewData["Title"] = Model.Name;
+    var averageRating = Model.Reviews?.Any() == true ? Model.Reviews.Average(r => r.Rating) : 0;
 }
 
-<h2>@Model.Name</h2>
-<img src="@Model.ImageUrl" class="img-fluid" alt="@Model.Name">
-<p>@Model.Description</p>
-<p><strong>Price:</strong> @Model.Price lv.</p>
-<a href="@Url.Action("Add", "Cart", new { productId = Model.Id })" class="btn btn-success">Add to cart</a>
-<a href="@Url.Action("Add", "Wishlist", new { productId = Model.Id })" class="btn btn-warning">Add to wishlist</a>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 
-<h3>Reviews</h3>
-@foreach (var review in Model.Reviews)
-{
-    <div>
-        <strong>@review.User.FullName:</strong> <em>@review.Comment</em> (Оценка: @review.Rating/5)
+<section class="container my-5 animate__animated animate__fadeIn">
+    <div class="row g-5 align-items-center">
+        <div class="col-md-6">
+            <div class="position-relative rounded overflow-hidden shadow-lg">
+                <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid w-100" style="object-fit: cover; max-height: 500px;">
+                <span class="badge bg-danger position-absolute top-0 start-0 m-3 fs-6 animate__animated animate__fadeInLeft">🔥 Best Seller</span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <h1 class="fw-bold text-warning display-4">@Model.Name</h1>
+            <p class="fs-5 text-muted fw-bold">@Model.Description</p>
+            <p class="fs-4 fw-bold text-success">Price: @Model.Price lv.</p>
+
+            @if (averageRating > 0)
+            {
+                <p class="mb-2">
+                    <span class="text-warning">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <i class="fa @(i <= Math.Round(averageRating) ? "fa-star" : "fa-star-o") text-warning"></i>
+                        }
+                    </span>
+                    <small class="text-muted">(@averageRating.ToString("0.0") out of 5)</small>
+                </p>
+            }
+
+            <div class="mt-4 d-flex flex-wrap gap-3">
+                <a href="@Url.Action("Add", "Cart", new { productId = Model.Id })" class="btn btn-success btn-lg px-4 shadow-sm animate__animated animate__pulse animate__infinite">🛒 Add to Cart</a>
+                <a href="@Url.Action("Add", "Wishlist", new { productId = Model.Id })" class="btn btn-warning btn-lg px-4 text-dark shadow-sm">💖 Add to Wishlist</a>
+            </div>
+        </div>
     </div>
+</section>
+
+<!-- Customer Reviews Section -->
+<section class="container my-5">
+    <h2 class="fw-bold text-primary mb-4">Customer Reviews 💬</h2>
+
+    <div id="reviewsContainer" class="row row-cols-1 row-cols-md-2 g-4">
+        @if (Model.Reviews != null && Model.Reviews.Any())
+        {
+            foreach (var review in Model.Reviews)
+            {
+                <div class="col">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body">
+                            <h5 class="fw-bold">@(!string.IsNullOrEmpty(review.User?.FullName) ? review.User.FullName : review.User?.UserName)</h5>
+                            <p class="mb-2"><em>“@review.Comment”</em></p>
+                            <p class="text-warning">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <i class="fa @(i <= review.Rating ? "fa-star text-warning" : "fa-star-o text-warning")"></i>
+                                }
+                            </p>
+                            @if (User.Identity.IsAuthenticated && (review.UserId == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value))
+                            {
+                                <div class="mt-2">
+                                    <a href="@Url.Action("Edit", "Review", new { id = review.Id })" class="btn btn-sm btn-outline-primary">Edit</a>
+                                    <form asp-action="Delete" asp-controller="Review" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@review.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                    </form>
+                                </div>
+                            }
+                            else if (User.IsInRole("Admin"))
+                            {
+                                <div class="mt-2">
+                                    <form asp-action="Delete" asp-controller="Review" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@review.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                    </form>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info">No reviews yet. Be the first to share your experience!</div>
+        }
+    </div>
+
+    <!-- Review Form -->
+    <div id="reviewMessage" class="mt-3"></div>
+    <form id="reviewForm" method="post" asp-controller="Review" asp-action="Add">
+        <input type="hidden" name="ProductId" value="@Model.Id" />
+        <div class="mb-3">
+            <label for="Comment" class="form-label">Your Review</label>
+            <textarea id="Comment" name="Comment" class="form-control" rows="3" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Your Rating</label>
+            <div id="starRatingInput" class="mb-2">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    <i class="fa fa-star-o star-input" data-value="@i" style="font-size: 2rem; color: #ccc; cursor: pointer;"></i>
+                }
+            </div>
+            <input type="hidden" id="Rating" name="Rating" required />
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg shadow-lg px-5">Submit Review 🚀</button>
+        @Html.AntiForgeryToken()
+    </form>
+</section>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).on('click', '.star-input', function () {
+            var rating = $(this).data('value');
+            $('#Rating').val(rating);
+            $('.star-input').each(function () {
+                var value = $(this).data('value');
+                $(this).removeClass('fa-star fa-star-o');
+                $(this).addClass(value <= rating ? 'fa-star text-warning' : 'fa-star-o text-warning');
+            });
+        });
+
+        $('#reviewForm').submit(function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        $('#reviewMessage').html('<div class="alert alert-danger">' + response.message + '</div>');
+                        $('#reviewMessage .alert').delay(5000).fadeOut(500);
+                    }
+                },
+                error: function () {
+                    $('#reviewMessage').html('<div class="alert alert-danger">Something went wrong. Please try again.</div>');
+                    $('#reviewMessage .alert').delay(5000).fadeOut(500);
+                }
+            });
+        });
+    </script>
 }
-<form method="post" action="@Url.Action("Add", "Review")">
-    <input type="hidden" name="ProductId" value="@Model.Id" />
-    <textarea name="Comment" placeholder="Напиши ревю..." class="form-control"></textarea>
-    <input type="number" name="Rating" min="1" max="5" class="form-control" />
-    <button type="submit" class="btn btn-primary mt-2">Добави ревю</button>
-</form>

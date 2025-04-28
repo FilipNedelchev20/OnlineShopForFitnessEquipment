@@ -31,7 +31,7 @@
                     <div class="card-body p-4 d-flex flex-column justify-content-between">
                         <h5 class="product-name text-dark fw-bold" style="font-size: 1.25rem; text-transform: uppercase;">@product.Name</h5>
 
-                        <p class="product-price fw-bold text-success" style="font-size: 1.125rem;">$@product.Price</p>
+                        <p class="product-price fw-bold text-success" style="font-size: 1.125rem;">@product.Price lv.</p>
 
                         <div class="d-flex gap-2">
                             <a href="@Url.Action("Details", "Product", new { id = product.Id })"
