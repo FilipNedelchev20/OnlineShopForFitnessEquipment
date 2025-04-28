@@ -126,19 +126,43 @@
 
 <!-- Categories Section -->
 <section class="container my-5">
-    <h2 class="text-center text-primary fw-bold mb-4">Shop by Category 🏋️‍♂️</h2>
-    <div class="row g-4">
+    <h2 class="text-center mb-4 fw-bold text-warning shadow-lg p-2 rounded-3">Browse by Categories 🏋️‍♂️</h2>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
         @foreach (var category in Model.TopCategories)
         {
-            <div class="col-6 col-md-3">
-                <a href="@Url.Action("Index", "Product", new { categoryId = category.Id })" class="text-decoration-none">
-                    <div class="card shadow-sm border-0 h-100 text-center hover-zoom">
-                        <div class="card-body">
-                            <i class="fa fa-dumbbell fa-3x text-warning mb-3"></i>
-                            <h5 class="fw-bold">@category.Name</h5>
+            var icon = "bi-tags-fill"; // Default icon
+
+            switch (category.Name)
+            {
+                case "Free Weights":
+                    icon = "bi-dumbbell";
+                    break;
+                case "Cardio Machines":
+                    icon = "bi-heart-pulse-fill";
+                    break;
+                case "Gym Packages":
+                    icon = "bi-box-seam";
+                    break;
+                case "Gym Strength Equipment":
+                    icon = "bi-bar-chart-fill";
+                    break;
+                case "Gym Supplies":
+                    icon = "bi-bag-fill";
+                    break;
+            }
+            <div class="col">
+                <div class="card shadow-lg border-0 rounded-3 h-100 animate__animated animate__fadeInUp">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-center p-5">
+                        <div class="icon-wrapper mb-4">
+                            <i class="bi @icon" style="font-size: 3rem; color: #fcd900;"></i>
                         </div>
+                        <h5 class="fw-bold text-dark mb-3">@category.Name</h5>
+                        <a href="@Url.Action("ByCategory", "Product", new { categoryId = category.Id })" class="btn btn-outline-warning fw-bold shadow-lg animate__animated animate__pulse animate__infinite rounded-pill px-4 py-2">
+                            Explore →
+                        </a>
                     </div>
-                </a>
+                </div>
             </div>
         }
     </div>
@@ -227,5 +251,25 @@
     .carousel-indicators .active {
         opacity: 1;
         transform: scale(1.2);
+    }
+
+    .icon-wrapper {
+        width: 100px;
+        height: 100px;
+        background: #fff8cc;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: transform 0.3s ease;
+    }
+
+        .icon-wrapper:hover {
+            transform: scale(1.1);
+        }
+
+    .card:hover {
+        transform: translateY(-5px);
+        transition: transform 0.3s ease;
     }
 </style>

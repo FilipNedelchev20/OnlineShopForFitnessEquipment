@@ -3,7 +3,11 @@
 @{
     ViewData["Title"] = "Categories";
 }
-
+<div class="mb-3">
+    <a href="@Url.Action("Index", "Home")" class="btn btn-light shadow-lg fw-bold">
+        ⬅️ Back to Home
+    </a>
+</div>
 <h2>Categories</h2>
 <div class="row">
     @foreach (var category in Model)
