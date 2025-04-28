@@ -12,16 +12,21 @@ public class AdminController : Controller
         _adminService = adminService;
     }
 
-    public IActionResult AssignRole()
+    public async Task<IActionResult> ManageUsers()
     {
-        return View();
+        var users = await _adminService.GetAllUsersAsync();
+        var roles = await _adminService.GetAllRolesAsync();
+
+        ViewBag.Roles = roles;
+        return View(users);
     }
 
     [HttpPost]
-    public async Task<IActionResult> AssignRole(string email, string role)
+    public async Task<IActionResult> AssignRole(string userId, string role)
     {
-        var success = await _adminService.AssignRoleAsync(email, role);
-        ViewBag.Message = success ? $"Role {role} assigned to {email}!" : "User not found.";
-        return View();
+        var success = await _adminService.AssignRoleByIdAsync(userId, role);
+
+        TempData["Message"] = success ? "Role assigned successfully!" : "Error assigning role.";
+        return RedirectToAction(nameof(ManageUsers));
     }
 }
