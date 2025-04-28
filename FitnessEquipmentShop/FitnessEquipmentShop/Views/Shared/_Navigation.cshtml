@@ -46,12 +46,15 @@
             @inject SignInManager<User> SignInManager
             @inject UserManager<User> UserManager
 
-            @if (SignInManager.IsSignedIn(User))
-            {
-                var currentUser = await UserManager.GetUserAsync(User);
-                var isAdmin = await UserManager.IsInRoleAsync(currentUser, "Admin");
+            @{
+                var isAuthenticated = SignInManager.IsSignedIn(User);
+                var currentUser = isAuthenticated ? await UserManager.GetUserAsync(User) : null;
+                var isAdmin = currentUser != null && await UserManager.IsInRoleAsync(currentUser, "Admin");
+            }
 
-                @if (isAdmin)
+            @if (currentUser != null)
+            {
+                if (isAdmin)
                 {
                     <div class="dropdown me-3">
                         <a class="nav-link dropdown-toggle fw-bold text-white" href="#" id="adminDropdown"
@@ -61,16 +64,14 @@
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="adminDropdown">
                             <li><a class="dropdown-item" href="@Url.Action("Create", "Product")">Add Product</a></li>
                             <li><a class="dropdown-item" href="@Url.Action("Create", "Category")">Add Category</a></li>
-                            <li><a class="dropdown-item" href="@Url.Action("AssignRole", "Admin")">Manage Users</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("ManageUsers", "Admin")">Manage Users</a></li>
                         </ul>
                     </div>
                 }
 
                 <span class="navbar-text text-white fw-bold me-3">
-                    Welcome, @User.Identity.Name!
+                    <a asp-controller="Profile" asp-action="Index">Welcome, @User.Identity.Name!</a>
                 </span>
-
-               
 
                 <form method="post" asp-area="Identity" asp-page="/Account/Logout" class="d-inline">
                     <button type="submit" class="btn btn-danger">Logout</button>
@@ -78,13 +79,10 @@
             }
             else
             {
-                <a class="btn btn-outline-light me-2 fw-bold" asp-area="Identity" asp-page="/Account/Login">
-                    Login
-                </a>
-                <a class="btn btn-warning fw-bold text-dark" asp-area="Identity" asp-page="/Account/Register">
-                    Register
-                </a>
+                <a class="btn btn-outline-light me-2 fw-bold" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                <a class="btn btn-warning fw-bold text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
             }
+
         </div>
     </div>
 </nav>

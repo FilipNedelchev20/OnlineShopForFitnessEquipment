@@ -1,28 +1,37 @@
 ﻿@model IEnumerable<FitnessEquipmentShop.Data.Models.Entities.Wishlist>
 
 @{
-    ViewData["Title"] = "Whishlist";
+    ViewData["Title"] = "Wishlist";
 }
 
-<h2>Whishlist</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Product</th>
-            <th>Price</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Product.Name</td>
-                <td>@item.Product.Price lv.</td>
-                <td>
-                    <a href="@Url.Action("Remove", "Wishlist", new { id = item.Id })" class="btn btn-danger">Remove</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="container py-5">
+    <h2 class="text-center mb-4 display-4 fw-bold text-primary">My Wishlist</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center shadow-sm">
+            Your wishlist is empty. Start adding your favorite gear!
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0">
+                        <div class="card-body">
+                            <h5 class="card-title text-dark">@item.Product.Name</h5>
+                            <p class="card-text text-success fs-5 fw-semibold">@item.Product.Price lv.</p>
+                        </div>
+                        <div class="card-footer bg-white border-0 text-end">
+                            <a href="@Url.Action("Remove", "Wishlist", new { id = item.Id })" class="btn btn-outline-danger">
+                                <i class="bi bi-trash"></i> Remove
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

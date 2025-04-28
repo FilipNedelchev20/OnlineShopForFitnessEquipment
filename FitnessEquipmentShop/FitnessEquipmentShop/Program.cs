@@ -50,8 +50,15 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    await IdentityInitializer.SeedRolesAndAdminAsync(services);
+    var context = services.GetRequiredService<ApplicationDbContext>();
+
+    // Apply pending migrations
+    context.Database.Migrate();
+
+    // Seed roles and admin
+     IdentityInitializer.SeedRolesAndAdminAsync(services).Wait();
 }
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
