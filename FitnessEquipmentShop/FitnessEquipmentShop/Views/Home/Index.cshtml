@@ -23,7 +23,7 @@
                 <div style="margin-bottom: 7rem;">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <a href="@Url.Action("Index", "Product")" class="btn btn-lg btn-primary px-5 py-3 fw-bold">Shop Now 🛒</a>
+                        <a href="@Url.Action("Index", "Product")" class="btn btn-lg btn-primary px-5 py-3 fw-bold">Shop Now</a>
                     }
                     else
                     {
@@ -31,7 +31,7 @@
                            asp-area="Identity"
                            asp-page="/Account/Login"
                            asp-route-returnUrl="@Context.Request.Path">
-                            Shop Now 🛒
+                            Shop Now
                         </a>
                     }
                 </div>
@@ -116,7 +116,33 @@
         <span class="visually-hidden">Next</span>
     </button>
 </div>
+<!-- Search Bar -->
+<section class="container my-5">
+    <form method="get" asp-controller="Product" asp-action="Index" class="d-flex justify-content-center">
+        <input type="text" name="searchTerm" class="form-control form-control-lg w-50 shadow-sm" placeholder="Search for fitness equipment..." />
+        <button type="submit" class="btn btn-warning btn-lg ms-3 fw-bold">Search</button>
+    </form>
+</section>
 
+<!-- Categories Section -->
+<section class="container my-5">
+    <h2 class="text-center text-primary fw-bold mb-4">Shop by Category 🏋️‍♂️</h2>
+    <div class="row g-4">
+        @foreach (var category in Model.TopCategories)
+        {
+            <div class="col-6 col-md-3">
+                <a href="@Url.Action("Index", "Product", new { categoryId = category.Id })" class="text-decoration-none">
+                    <div class="card shadow-sm border-0 h-100 text-center hover-zoom">
+                        <div class="card-body">
+                            <i class="fa fa-dumbbell fa-3x text-warning mb-3"></i>
+                            <h5 class="fw-bold">@category.Name</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</section>
 <!-- Top Rated Products Section -->
 <section class="container mt-5">
     <h2 class="text-center mb-4 fw-bold text-warning shadow-lg p-2 rounded-3">Top Rated Products 🏆</h2>
@@ -131,8 +157,14 @@
                     </div>
                     <div class="card-body p-4 d-flex flex-column justify-content-between">
                         <h5 class="product-name text-dark fw-bold" style="font-size: 1.25rem; text-transform: uppercase;">@product.Name</h5>
-                        <p class="product-price fw-bold text-success" style="font-size: 1.125rem;">$@product.Price</p>
-                        <a href="@Url.Action("Details", "Product", new { id = product.Id })" class="btn btn-outline-warning btn-sm shadow-lg fw-bold animate__animated animate__pulse animate__infinite">View Product 👀</a>
+                        <p class="product-price fw-bold text-success" style="font-size: 1.125rem;">@product.Price lv.</p>
+                        <a class="btn btn-outline-warning btn-sm shadow-lg fw-bold animate__animated animate__pulse animate__infinite"
+                           href="@(!User.Identity.IsAuthenticated
+       ? Url.Page("/Account/Login", new { area = "Identity", returnUrl = Url.Action("Details", "Product", new { id = product.Id }) })
+       : Url.Action("Details", "Product", new { id = product.Id }))">
+                            View Product 👀
+                        </a>
+
                     </div>
                 </div>
             </div>
