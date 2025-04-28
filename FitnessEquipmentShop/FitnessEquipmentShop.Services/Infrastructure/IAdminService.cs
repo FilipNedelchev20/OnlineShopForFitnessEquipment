@@ -5,8 +5,10 @@ namespace FitnessEquipmentShop.Services
 {
     public interface IAdminService
     {
-        Task<List<User>> GetAllUsersAsync();
-        Task<List<string>> GetAllRolesAsync();
-        Task<bool> AssignRoleByIdAsync(string userId, string role);
+        Task<IEnumerable<UserViewModel>> GetAllUsersWithRolesAsync();
+        Task<bool> AssignRoleAsync(string userId, string role);
+        Task<bool> RemoveAllRolesAsync(string userId);
+        Task<bool> LockUserAsync(string userId, int days = 1);
+        Task<bool> UnlockUserAsync(string userId);
     }
 }
