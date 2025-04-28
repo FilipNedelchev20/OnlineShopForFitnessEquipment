@@ -4,20 +4,34 @@
     ViewData["Title"] = "Create Category";
 }
 
-<h2>Create Category</h2>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">Create New Category</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post" novalidate>
+                        <div class="form-floating mb-3">
+                            <input asp-for="Name" class="form-control" required autofocus placeholder="Category Name">
+                            <label asp-for="Name">Category Name</label>
+                            <span asp-validation-for="Name" class="text-danger small"></span>
+                        </div>
 
-<form asp-action="Create" method="post">
-    <div class="mb-3">
-        <label asp-for="Name" class="form-label">Category Name</label>
-        <input asp-for="Name" class="form-control" required>
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label">Category Description</label>
-        <input asp-for="Description" class="form-control" required>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
+                        <div class="form-floating mb-3">
+                            <input asp-for="Description" class="form-control" required placeholder="Category Description">
+                            <label asp-for="Description">Category Description</label>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
 
-    <button type="submit" class="btn btn-primary">Create</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-success px-4">Create</button>
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
