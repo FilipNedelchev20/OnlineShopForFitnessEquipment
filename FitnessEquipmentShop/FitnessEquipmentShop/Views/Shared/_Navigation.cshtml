@@ -20,9 +20,6 @@
                         <a class="nav-link fw-bold" href="@Url.Action("Index", "Product")">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-bold" href="@Url.Action("Index", "Category")">Categories</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link fw-bold" href="@Url.Action("Index", "Cart")">
                             <i class="fas fa-shopping-cart"></i>
                         </a>
@@ -70,8 +67,9 @@
                 }
 
                 <span class="navbar-text text-white fw-bold me-3">
-                    <a asp-controller="Profile" asp-action="Index">Welcome, @User.Identity.Name!</a>
+                    <a asp-controller="Profile" asp-action="Index" class="text-white text-decoration-none">Profile</a>
                 </span>
+
 
                 <form method="post" asp-area="Identity" asp-page="/Account/Logout" class="d-inline">
                     <button type="submit" class="btn btn-danger">Logout</button>

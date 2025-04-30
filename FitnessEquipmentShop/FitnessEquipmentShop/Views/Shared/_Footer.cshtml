@@ -1,4 +1,6 @@
-﻿<footer class="mt-5 bg-dark text-light py-5">
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+
+<footer class="mt-5 bg-dark text-light py-5">
     <div class="container text-center text-md-start">
         <div class="row">
             <!-- About Us Section -->
@@ -35,19 +37,9 @@
         <!-- Divider -->
         <hr class="border-secondary my-4" />
 
-        <!-- Newsletter Subscription -->
-        <div class="row justify-content-center">
-            <div class="col-md-6 text-center">
-                <h6 class="fw-bold text-uppercase">Stay Updated!</h6>
-                <p class="small">Subscribe to our newsletter for the latest deals and news.</p>
-                <form class="d-flex justify-content-center">
-                    <input type="email" class="form-control me-2" placeholder="Enter your email" style="max-width: 250px;">
-                    <button class="btn btn-warning">Subscribe</button>
-                </form>
-            </div>
-        </div>
 
         <!-- Copyright Section -->
         <p class="mt-4 small text-center mb-0">&copy; @DateTime.Now.Year - FitGear Hub. All rights reserved.</p>
     </div>
 </footer>
+

@@ -1,0 +1,22 @@
+﻿@model FitnessEquipmentShop.Data.Models.Entities.Category
+
+@{
+    ViewData["Title"] = "Delete Category";
+}
+
+<section class="container mt-5">
+    <h2 class="text-center mb-4 fw-bold text-danger shadow-lg p-2 rounded-3">
+        Delete Category
+    </h2>
+
+    <div class="alert alert-danger text-center fw-bold">
+        Are you sure you want to delete the category "<span class="text-dark">@Model.Name</span>"?
+    </div>
+
+    <form asp-action="Delete" method="post" class="d-flex justify-content-center gap-3">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger fw-bold">Yes, Delete</button>
+        <a href="@Url.Action("Index", "Category")" class="btn btn-secondary fw-bold">Cancel</a>
+    </form>
+</section>

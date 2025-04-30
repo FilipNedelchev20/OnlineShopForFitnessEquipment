@@ -1,19 +1,15 @@
-﻿@model IEnumerable<FitnessEquipmentShop.Data.Models.Entities.Order>
+﻿@using FitnessEquipmentShop.Data.Models.Entities
+@model IEnumerable<Order>
 
-@{
-    ViewData["Title"] = "My orders";
-}
-<div class="mb-3">
-    <a href="@Url.Action("Index", "Home")" class="btn btn-light shadow-lg fw-bold">
-        ⬅️ Back to Home
-    </a>
-</div>
-<h2>My orders</h2>
+<h2>My Orders</h2>
+
 <table class="table">
     <thead>
         <tr>
-            <th>Date</th>
+            <th>Order Date</th>
+            <th>Total Amount</th>
             <th>Status</th>
+            <th>Details</th>
         </tr>
     </thead>
     <tbody>
@@ -21,7 +17,11 @@
         {
             <tr>
                 <td>@order.OrderDate.ToShortDateString()</td>
+                <td>@order.TotalAmount.ToString("C")</td>
                 <td>@order.Status</td>
+                <td>
+                    <a href="@Url.Action("Details", "Order", new { id = order.Id })">View</a>
+                </td>
             </tr>
         }
     </tbody>

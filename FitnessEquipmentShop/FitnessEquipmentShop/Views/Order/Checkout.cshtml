@@ -4,11 +4,13 @@
 @{
     ViewData["Title"] = "Checkout";
 }
+
 <div class="mb-3">
     <a href="@Url.Action("Index", "Home")" class="btn btn-light shadow-lg fw-bold">
         ⬅️ Back to Home
     </a>
 </div>
+
 <div class="container py-5">
     <h2 class="text-center mb-5 display-4 fw-bold text-primary">Checkout</h2>
 
@@ -21,27 +23,36 @@
     else
     {
         <div class="table-responsive mb-4">
-            <table class="table table-hover align-middle shadow-sm">
-                <thead class="table-light">
-                    <tr>
-                        <th>Product</th>
-                        <th class="text-center">Quantity</th>
-                        <th class="text-end">Price</th>
-                        <th class="text-end">Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.CartItems)
-                    {
+            <form asp-controller="Cart" asp-action="UpdateQuantities" method="post">
+                <table class="table table-hover align-middle shadow-sm">
+                    <thead class="table-light">
                         <tr>
-                            <td>@item.Product.Name</td>
-                            <td class="text-center">@item.Quantity</td>
-                            <td class="text-end text-success">lv.@item.Product.Price</td>
-                            <td class="text-end fw-semibold">lv.@(item.Quantity * item.Product.Price)</td>
+                            <th>Product</th>
+                            <th class="text-center">Quantity</th>
+                            <th class="text-end">Price</th>
+                            <th class="text-end">Subtotal</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.CartItems.Count; i++)
+                        {
+                            <tr>
+                                <td>@Model.CartItems[i].Product.Name</td>
+                                <td class="text-center">
+                                    <input type="hidden" name="CartItems[@i].ProductId" value="@Model.CartItems[i].ProductId" />
+                                    <input type="number" name="CartItems[@i].Quantity" value="@Model.CartItems[i].Quantity" min="1" class="form-control text-center" style="width: 80px;" />
+                                </td>
+                                <td class="text-end text-success">lv.@Model.CartItems[i].Product.Price</td>
+                                <td class="text-end fw-semibold">lv.@(Model.CartItems[i].Quantity * Model.CartItems[i].Product.Price)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-sm btn-warning fw-bold">Update Quantities</button>
+                </div>
+            </form>
         </div>
 
         <div class="text-end mb-5">
@@ -51,7 +62,9 @@
         <div class="card shadow-sm">
             <div class="card-body">
                 <h3 class="card-title mb-4">Shipping Address</h3>
-                <form asp-action="PlaceOrder" method="post">
+                <form id="placeOrderForm" asp-controller="Order" asp-action="PlaceOrder" method="post">
+                    @Html.AntiForgeryToken()
+
                     <div class="row g-3">
                         <div class="col-md-8">
                             <label for="Address" class="form-label">Street Address</label>
@@ -64,8 +77,11 @@
                     </div>
 
                     <div class="text-end mt-4">
-                        <button type="submit" class="btn btn-lg btn-success shadow-sm">
-                            <i class="bi bi-check-circle-fill"></i> Place Order
+                        <button type="submit" id="placeOrderButton" class="btn btn-lg btn-success shadow-sm d-flex align-items-center justify-content-center">
+                            <span id="buttonText">
+                                <i class="bi bi-check-circle-fill"></i> Place Order
+                            </span>
+                            <div id="buttonSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"></div>
                         </button>
                     </div>
                 </form>
@@ -73,3 +89,56 @@
         </div>
     }
 </div>
+
+@section Scripts {
+    <script>
+        document.getElementById('placeOrderForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // prevent normal form submit
+
+            var button = document.getElementById('placeOrderButton');
+            var text = document.getElementById('buttonText');
+            var spinner = document.getElementById('buttonSpinner');
+
+            button.disabled = true;
+            text.textContent = "Processing...";
+            spinner.classList.remove('d-none');
+
+            const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+            var formData = {
+                Street: document.getElementById('Address').value,
+                City: document.getElementById('City').value,
+                __RequestVerificationToken: token
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("PlaceOrder", "Order")',
+                data: formData,
+                success: function () {
+                    Swal.fire({
+                        title: 'Order Placed!',
+                        text: 'Thank you for your purchase!',
+                        icon: 'success',
+                        confirmButtonColor: '#28a745',
+                        confirmButtonText: 'Continue'
+                    }).then(() => {
+                        window.location.href = '@Url.Action("Index", "Home")';
+                    });
+                },
+                error: function () {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Something went wrong, please try again.',
+                        icon: 'error',
+                        confirmButtonColor: '#dc3545',
+                        confirmButtonText: 'Ok'
+                    });
+                    button.disabled = false;
+                    spinner.classList.add('d-none');
+                    text.innerHTML = `<i class="bi bi-check-circle-fill"></i> Place Order`;
+                }
+            });
+        });
+    </script>
+}

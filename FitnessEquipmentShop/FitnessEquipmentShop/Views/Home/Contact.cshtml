@@ -1,0 +1,23 @@
+﻿@model ContactFormModel
+
+<h2>Contact Us</h2>
+
+<form asp-action="Contact" method="post">
+    <div>
+        <label>Name</label>
+        <input asp-for="Name" />
+    </div>
+    <div>
+        <label>Email</label>
+        <input asp-for="Email" />
+    </div>
+    <div>
+        <label>Subject</label>
+        <input asp-for="Subject" />
+    </div>
+    <div>
+        <label>Message</label>
+        <textarea asp-for="Message"></textarea>
+    </div>
+    <button type="submit">Send</button>
+</form>

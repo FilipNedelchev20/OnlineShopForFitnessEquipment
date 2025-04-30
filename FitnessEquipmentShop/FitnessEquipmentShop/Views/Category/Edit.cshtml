@@ -1,0 +1,35 @@
+﻿@model FitnessEquipmentShop.Data.Models.Entities.Category
+
+@{
+    ViewData["Title"] = "Edit Category";
+}
+
+<section class="container mt-5">
+    <h2 class="text-center mb-4 fw-bold text-warning shadow-lg p-2 rounded-3">
+        Edit Category
+    </h2>
+
+    <form asp-action="Edit" method="post" class="mx-auto" style="max-width: 600px;">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label fw-bold"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label fw-bold"></label>
+            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary fw-bold">Save Changes</button>
+        <a href="@Url.Action("Index", "Home")" class="btn btn-secondary fw-bold">Cancel</a>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

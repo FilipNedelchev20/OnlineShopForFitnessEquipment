@@ -1,4 +1,4 @@
-﻿@model IEnumerable<FitnessEquipmentShop.Data.Models.Entities.Product>
+﻿@model FitnessEquipmentShop.Web.ViewModel.ProductFilterViewModel
 
 @{
     ViewData["Title"] = "All Products";
@@ -10,42 +10,96 @@
             ⬅️ Back to Home
         </a>
     </div>
+
     <h2 class="text-center mb-4 fw-bold text-warning shadow-lg p-2 rounded-3">
         Products
     </h2>
 
-
-    <div aria-live="polite" aria-atomic="true" class="position-relative">
-        <div id="successToast" class="toast position-fixed top-0 end-0 m-3 bg-success text-white"
-             role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
-            <div class="toast-header">
-                <strong class="me-auto">Success</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-            </div>
-            <div class="toast-body">Product deleted successfully!</div>
+    <!-- 🔍 Filter/Search Bar -->
+    <form method="get" asp-action="Index" class="row row-cols-1 row-cols-md-4 g-3 mb-4">
+        <div class="col">
+            <input type="text" name="SearchTerm" class="form-control" placeholder="Search products..." value="@Model.SearchTerm" id="searchInput" autocomplete="off" />
+            <div id="suggestions" class="list-group position-absolute z-3"></div>
         </div>
-    </div>
+        <div class="col">
+            <select name="SelectedCategoryId" class="form-select">
+                <option value="">All Categories</option>
+                @foreach (var category in Model.Categories)
+                {
+                    if (Model.SelectedCategoryId == category.Id)
+                    {
+                        <option value="@category.Id" selected>@category.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-6">
+            <div class="text-center mb-2">
+                <label class="form-label fw-bold mb-0">Price Range (lv)</label>
+            </div>
+            <div id="price-slider" class="mb-3"></div>
+            <input type="hidden" id="MinPrice" name="MinPrice" value="@Model.MinPrice" />
+            <input type="hidden" id="MaxPrice" name="MaxPrice" value="@Model.MaxPrice" />
+        </div>
+        <div class="col">
+            <select name="SortBy" class="form-select fw-bold">
+                <option value="">🔎 Sort Products</option>
+
+                @if (Model.SortBy == "rating")
+                {
+                    <option value="rating" selected>⭐ Rating: High to Low</option>
+                }
+                else
+                {
+                    <option value="rating">⭐ Rating: High to Low</option>
+                }
+
+                @if (Model.SortBy == "price-asc")
+                {
+                    <option value="price-asc" selected>⬆️ Price: Low to High</option>
+                }
+                else
+                {
+                    <option value="price-asc">⬆️ Price: Low to High</option>
+                }
+
+                @if (Model.SortBy == "price-desc")
+                {
+                    <option value="price-desc" selected>⬇️ Price: High to Low</option>
+                }
+                else
+                {
+                    <option value="price-desc">⬇️ Price: High to Low</option>
+                }
+            </select>
+
+        </div>
+        <div class="col-12 d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary">Apply Filters</button>
+            <a href="@Url.Action("Index", "Product")" class="btn btn-outline-secondary">Clear Filters</a>
+        </div>
+    </form>
 
     <div class="row row-cols-1 row-cols-md-3 g-4">
-        @foreach (var product in Model)
+        @foreach (var product in Model.Products)
         {
             <div class="col">
                 <div class="card shadow-lg border-0 rounded-3" style="height: 450px;">
                     <div class="position-relative">
-                        <img src="@product.ImageUrl" class="card-img-top img-fluid rounded-3" alt="@product.Name"
-                             style="height: 250px; object-fit: cover; border-radius: 15px 15px 0 0;">
+                        <img src="@product.ImageUrl" class="card-img-top img-fluid rounded-3" alt="@product.Name" style="height: 250px; object-fit: cover; border-radius: 15px 15px 0 0;">
                         <span class="badge bg-primary position-absolute top-0 start-0 m-3 fw-bold animate__animated animate__fadeInLeft">✨ New</span>
                     </div>
                     <div class="card-body p-4 d-flex flex-column justify-content-between">
                         <h5 class="product-name text-dark fw-bold" style="font-size: 1.25rem; text-transform: uppercase;">@product.Name</h5>
-
                         <p class="product-price fw-bold text-success" style="font-size: 1.125rem;">@product.Price lv.</p>
-
                         <div class="d-flex gap-2">
                             <a href="@Url.Action("Details", "Product", new { id = product.Id })"
                                class="btn btn-outline-warning btn-sm shadow-lg fw-bold animate__animated animate__pulse animate__infinite">Details 👀</a>
                         </div>
-
                         @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                         {
                             <div class="mt-2 d-flex gap-2">
@@ -82,9 +136,45 @@
             </div>
         }
     </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav class="mt-4 d-flex justify-content-center">
+            <ul class="pagination pagination-lg">
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.Page ? "active" : "")">
+                        <a class="page-link fw-bold"
+                           href="@Url.Action("Index", "Product", new {
+                           SearchTerm = Model.SearchTerm,
+                           SelectedCategoryId = Model.SelectedCategoryId,
+                           MinPrice = Model.MinPrice,
+                           MaxPrice = Model.MaxPrice,
+                           SortBy = Model.SortBy,
+                           page = i
+                       })">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
 </section>
+<style>
+    select.form-select.fw-bold {
+        transition: all 0.3s ease;
+        background-color: #fffbe6;
+        border: 2px solid #fcd900;
+    }
+
+        select.form-select.fw-bold:hover {
+            background-color: #fff3cd;
+            box-shadow: 0 0 10px rgba(252, 217, 0, 0.7);
+        }
+</style>
 
 @section Scripts {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.js"></script>
     <script>
         $(document).ready(function () {
             var successMessage = '@TempData["SuccessMessage"]';
@@ -92,6 +182,47 @@
                 var toastEl = $('#successToast');
                 toastEl.find('.toast-body').text(successMessage);
                 toastEl.toast('show');
+            }
+
+            $('#searchInput').on('keyup', function () {
+                const query = $(this).val();
+                if (query.length > 1) {
+                    $.get('@Url.Action("SearchSuggestions", "Product")', { term: query }, function (data) {
+                        let list = '';
+                        data.forEach(p => {
+                            list += `<a href="/Product/Details/${p.id}" class="list-group-item list-group-item-action">${p.name}</a>`;
+                        });
+                        $('#suggestions').html(list).show();
+                    });
+                } else {
+                    $('#suggestions').hide();
+                }
+            });
+
+            var priceSlider = document.getElementById('price-slider');
+
+            if (priceSlider) {
+                noUiSlider.create(priceSlider, {
+                    start: [@Model.MinPrice, @Model.MaxPrice],
+                    connect: true,
+                    range: {
+                        'min': 0,
+                        'max': 5000
+                    },
+                    step: 10,
+                    tooltips: [true, true],
+                    format: {
+                        from: Number,
+                        to: function (value) {
+                            return Math.round(value);
+                        }
+                    }
+                });
+
+                priceSlider.noUiSlider.on('update', function (values, handle) {
+                    document.getElementById('MinPrice').value = values[0];
+                    document.getElementById('MaxPrice').value = values[1];
+                });
             }
         });
     </script>
