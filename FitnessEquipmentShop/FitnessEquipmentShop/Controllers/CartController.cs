@@ -1,6 +1,7 @@
 ﻿using FitnessEquipmentShop.Data.Models.Entities;
 using FitnessEquipmentShop.Services;
 using FitnessEquipmentShop.Web.ViewModel;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
