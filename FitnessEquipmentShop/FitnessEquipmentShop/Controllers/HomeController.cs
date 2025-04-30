@@ -68,7 +68,9 @@ namespace FitnessEquipmentShop.Controllers
             {
                 var message = $"Name: {model.Name}\nEmail: {model.Email}\nSubject: {model.Subject}\nMessage: {model.Message}";
                 //await _emailService.SendEmailAsync("your-email@example.com", "Contact Form Submission", message);
-                return RedirectToAction("Index","Home");
+                TempData["MessageSent"] = "Thank you! Your message has been sent successfully.";
+                return RedirectToAction("Contact");
+
             }
             return View(model);
         }

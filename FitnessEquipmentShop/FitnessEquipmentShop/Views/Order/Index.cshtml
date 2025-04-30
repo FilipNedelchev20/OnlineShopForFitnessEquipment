@@ -1,6 +1,16 @@
 ﻿@using FitnessEquipmentShop.Data.Models.Entities
 @model IEnumerable<Order>
 
+<div class="mb-3">
+    <a href="@Url.Action("Index", "Home")" class="btn btn-light shadow-lg fw-bold">
+        ⬅️ Back to Home
+    </a>
+</div>
+<div class="mb-3">
+    <a href="@Url.Action("Index", "Profile")" class="btn btn-light shadow-lg fw-bold">
+        ⬅️ Back to Profile
+    </a>
+</div>
 <h2>My Orders</h2>
 
 <table class="table">

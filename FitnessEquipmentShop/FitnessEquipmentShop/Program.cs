@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.Facebook;
 using FitnessEquipmentShop.Services;
 using FitnessEquipmentShop.Services.Infrastructure;
 using FitnessEquipmentShop.Services.Implementation;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,8 @@ builder.Services.AddIdentity<User, IdentityRole>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient<IEmailSender, DummyEmailSender>();
+
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
