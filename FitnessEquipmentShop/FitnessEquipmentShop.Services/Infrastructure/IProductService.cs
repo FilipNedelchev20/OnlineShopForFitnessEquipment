@@ -7,6 +7,7 @@ namespace FitnessEquipmentShop.Services
     public interface IProductService
     {
         Task<IEnumerable<Product>> GetAllProductsAsync();
+        Task<IEnumerable<Product>> GetProductsByCategoryIdAsync(int categoryId); // ✅ NEW
         Task<Product> GetProductByIdAsync(int id);
         Task CreateProductAsync(Product product);
         Task UpdateProductAsync(Product product);

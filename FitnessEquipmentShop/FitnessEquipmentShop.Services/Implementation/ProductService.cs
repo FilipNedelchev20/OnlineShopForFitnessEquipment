@@ -18,6 +18,13 @@ namespace FitnessEquipmentShop.Services
         {
             return await _context.Products.Include(p => p.Category).ToListAsync();
         }
+        public async Task<IEnumerable<Product>> GetProductsByCategoryIdAsync(int categoryId) // ✅ NEW
+        {
+            return await _context.Products
+                .Include(p => p.Category)
+                .Where(p => p.CategoryId == categoryId)
+                .ToListAsync();
+        }
 
         public async Task<Product> GetProductByIdAsync(int id)
         {

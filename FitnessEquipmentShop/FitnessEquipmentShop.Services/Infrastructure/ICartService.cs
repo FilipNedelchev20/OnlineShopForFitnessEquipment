@@ -9,5 +9,6 @@ namespace FitnessEquipmentShop.Services
         Task<IEnumerable<CartItem>> GetCartItemsAsync();
         Task AddToCartAsync(int productId, string userId);
         Task RemoveFromCartAsync(int cartItemId);
+        Task UpdateQuantityAsync(string userId, int productId, int quantity);
     }
 }

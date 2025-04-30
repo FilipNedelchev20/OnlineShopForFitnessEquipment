@@ -49,5 +49,17 @@ namespace FitnessEquipmentShop.Services
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task UpdateQuantityAsync(string userId, int productId, int quantity)
+        {
+            var cartItem = await _context.CartItems
+                .FirstOrDefaultAsync(c => c.UserId == userId && c.ProductId == productId);
+
+            if (cartItem != null && quantity > 0)
+            {
+                cartItem.Quantity = quantity;
+                await _context.SaveChangesAsync();
+            }
+        }
+
     }
 }
