@@ -3,11 +3,13 @@ using FitnessEquipmentShop.Data.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using FitnessEquipmentShop.Data.Seed;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using FitnessEquipmentShop.Common;
+
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using FitnessEquipmentShop.Services;
+using FitnessEquipmentShop.Services.Infrastructure;
+using FitnessEquipmentShop.Services.Implementation;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +24,7 @@ builder.Services.AddIdentity<User, IdentityRole>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddSingleton<IEmailSender, EmailSender>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
