@@ -1,7 +1,9 @@
 ﻿using FitnessEquipmentShop.Data.Models.Entities;
 using FitnessEquipmentShop.Services;
+using FitnessEquipmentShop.Web.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 public class CartController : Controller
@@ -38,4 +40,18 @@ public class CartController : Controller
         await _cartService.RemoveFromCartAsync(id);
         return RedirectToAction("Index");
     }
+    [HttpPost]
+    public async Task<IActionResult> UpdateQuantities(List<CartItemViewModel> cartItems)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId == null) return RedirectToAction("Login", "Account");
+
+        foreach (var item in cartItems)
+        {
+            await _cartService.UpdateQuantityAsync(userId, item.ProductId, item.Quantity);
+        }
+
+        return RedirectToAction("Checkout", "Order");
+    }
+
 }

@@ -12,14 +12,26 @@ namespace FitnessEquipmentShop.Web.Controllers
     public class AdminController : Controller
     {
         private readonly IAdminService _adminService;
+        private readonly IOrderService _orderService;
         private readonly UserManager<User> _userManager;
 
-        public AdminController(IAdminService adminService, UserManager<User> userManager = null)
+        public AdminController(IAdminService adminService, UserManager<User> userManager = null, IOrderService orderService = null)
         {
             _adminService = adminService;
             _userManager = userManager;
+            _orderService = orderService;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var orders = await _orderService.GetAllOrdersAsync();
+            return View(orders);
         }
 
+        public async Task<IActionResult> UpdateStatus(int id, string status)
+        {
+            await _orderService.UpdateOrderStatusAsync(id, status);
+            return RedirectToAction("Index");
+        }
         public async Task<IActionResult> ManageUsers()
         {
             var users = await _userManager.Users.ToListAsync();

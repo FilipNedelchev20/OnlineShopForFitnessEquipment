@@ -1,9 +1,10 @@
 ﻿using FitnessEquipmentShop.Services;
 using FitnessEquipmentShop.Web.ViewModel.Home;
-using FitnessEquipmentShop.Web.ViewModel.Category;
+using FitnessEquipmentShop.Web.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace FitnessEquipmentShop.Controllers
 {
@@ -11,6 +12,8 @@ namespace FitnessEquipmentShop.Controllers
     {
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
+        private readonly IEmailSender _emailService;
+
 
         public HomeController(IProductService productService, ICategoryService categoryService)
         {
@@ -51,5 +54,29 @@ namespace FitnessEquipmentShop.Controllers
 
             return View(model);
         }
+        [HttpGet]
+        public IActionResult Contact()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Contact(ContactFormModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var message = $"Name: {model.Name}\nEmail: {model.Email}\nSubject: {model.Subject}\nMessage: {model.Message}";
+                //await _emailService.SendEmailAsync("your-email@example.com", "Contact Form Submission", message);
+                return RedirectToAction("Index","Home");
+            }
+            return View(model);
+        }
+
+        //public IActionResult ContactConfirmation()
+        //{
+        //    return View();
+        //}
+
     }
 }

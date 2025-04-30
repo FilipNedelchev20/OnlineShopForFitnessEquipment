@@ -4,6 +4,7 @@ using FitnessEquipmentShop.Web.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 public class ProductController : Controller
@@ -19,11 +20,70 @@ public class ProductController : Controller
 
     // Accessible by everyone
     [AllowAnonymous]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchTerm, int? selectedCategoryId, decimal? minPrice, decimal? maxPrice, string sortBy, int page = 1)
     {
+        const int pageSize = 6;
+
         var products = await _productService.GetAllProductsAsync();
-        return View(products);
+        var categories = await _categoryService.GetAllCategoriesAsync();
+
+        // Ensure defaults if missing (important for slider and logic)
+        if (!minPrice.HasValue) minPrice = 0;
+        if (!maxPrice.HasValue) maxPrice = 5000;
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            products = products.Where(p => p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        if (selectedCategoryId.HasValue)
+        {
+            products = products.Where(p => p.CategoryId == selectedCategoryId.Value).ToList();
+        }
+
+        if (minPrice.HasValue)
+        {
+            products = products.Where(p => p.Price >= minPrice.Value).ToList();
+        }
+
+        if (maxPrice.HasValue)
+        {
+            products = products.Where(p => p.Price <= maxPrice.Value).ToList();
+        }
+
+        if (!string.IsNullOrEmpty(sortBy))
+        {
+            products = sortBy switch
+            {
+                "rating" => products.OrderByDescending(p => p.Reviews.Any() ? p.Reviews.Average(r => r.Rating) : 0).ToList(),
+                "price-asc" => products.OrderBy(p => p.Price).ToList(),
+                "price-desc" => products.OrderByDescending(p => p.Price).ToList(),
+                _ => products
+            };
+        }
+
+        var totalProducts = products.Count();
+        var totalPages = (int)Math.Ceiling(totalProducts / (double)pageSize);
+        var pagedProducts = products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+        var viewModel = new ProductFilterViewModel
+        {
+            Products = pagedProducts,
+            Categories = categories,
+            SearchTerm = searchTerm,
+            SelectedCategoryId = selectedCategoryId,
+            MinPrice = minPrice,
+            MaxPrice = maxPrice,
+            SortBy = sortBy,
+            Page = page,
+            TotalPages = totalPages
+        };
+
+        return View(viewModel);
     }
+
+
+
 
     // Accessible by everyone
     [AllowAnonymous]
@@ -150,4 +210,32 @@ public class ProductController : Controller
         TempData["SuccessMessage"] = "Product deleted successfully!";
         return RedirectToAction("Index");
     }
+    [HttpGet]
+    public async Task<IActionResult> SearchSuggestions(string term)
+    {
+        var allProducts = await _productService.GetAllProductsAsync();
+
+        var suggestions = allProducts
+            .Where(p => p.Name.Contains(term, StringComparison.OrdinalIgnoreCase))
+            .Select(p => new { id = p.Id, name = p.Name })
+            .Take(5)
+            .ToList();
+
+        return Json(suggestions);
+    }
+    public async Task<IActionResult> CategoryInfo(int categoryId)
+    {
+        var category = await _categoryService.GetCategoryByIdAsync(categoryId);
+        var products = await _productService.GetProductsByCategoryIdAsync(categoryId);
+
+        var viewModel = new CategoryInfoViewModel
+        {
+            Category = category,
+            Products = products
+        };
+
+        return View(viewModel);
+    }
+
+
 }
