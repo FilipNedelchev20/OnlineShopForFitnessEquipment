@@ -1,4 +1,4 @@
-﻿namespace FitnessEquipmentShop.Web.ViewModel.Category
+﻿namespace FitnessEquipmentShop.Web.ViewModel
 {
     public class CategoryViewModel
     {
