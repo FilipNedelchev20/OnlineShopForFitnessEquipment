@@ -85,6 +85,15 @@ dotnet run
 - **Лесен за разширяване**: Проектът е добре структуриран и готов за бъдещи подобрения и нови функционалности.
 
 ---
+## Снимки от проекта
+<img width="1274" alt="image" src="https://github.com/user-attachments/assets/cef0588d-6852-4073-84df-3f2e4a1a71d3" />
+<img width="1280" alt="image" src="https://github.com/user-attachments/assets/71c6876e-ad8a-4687-a48d-43065b6d9831" />
+<img width="1274" alt="image" src="https://github.com/user-attachments/assets/ea253571-6bb7-4a57-b176-a658f63ef867" />
+<img width="1279" alt="image" src="https://github.com/user-attachments/assets/cac1e6a2-38ad-4018-88b0-e7bd81261f9c" />
+<img width="1277" alt="image" src="https://github.com/user-attachments/assets/ede81cf0-6e44-41e9-8542-ff5cdd0252fb" />
+<img width="881" alt="image" src="https://github.com/user-attachments/assets/e8184a81-b657-4122-a43c-2d2190549d92" />
+
+---
 
 ## 💡 Идеи за разширение:
 
