@@ -133,13 +133,25 @@ public class ProductController : Controller
     }
     public async Task<IActionResult> ByCategory(int categoryId)
     {
+        var allCategories = await _categoryService.GetAllCategoriesAsync();
         var products = await _productService.GetAllProductsAsync();
+
         var filteredProducts = products
             .Where(p => p.CategoryId == categoryId)
             .ToList();
 
-        return View("Index", filteredProducts); // Използваме същия view за продукти
+        var viewModel = new ProductFilterViewModel
+        {
+            Products = filteredProducts,
+            Categories = allCategories,
+            SelectedCategoryId = categoryId,
+            Page = 1,
+            TotalPages = 1
+        };
+
+        return View("Index", viewModel); // Reuse the Index.cshtml
     }
+
 
     // Only Admin can edit products
     [Authorize(Roles = "Admin")]

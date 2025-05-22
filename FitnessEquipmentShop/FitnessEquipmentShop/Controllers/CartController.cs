@@ -25,11 +25,7 @@ public class CartController : Controller
 
     public async Task<IActionResult> Add(int productId)
     {
-        // Ensure user is logged in, otherwise redirect to login.
-        if (!User.Identity.IsAuthenticated)
-        {
-            return RedirectToAction("Login", "Account"); // or your login page
-        }
+        
 
         var userId = _userManager.GetUserId(User);
         await _cartService.AddToCartAsync(productId, userId);
@@ -45,7 +41,7 @@ public class CartController : Controller
     public async Task<IActionResult> UpdateQuantities(List<CartItemViewModel> cartItems)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userId == null) return RedirectToAction("Login", "Account");
+     
 
         foreach (var item in cartItems)
         {

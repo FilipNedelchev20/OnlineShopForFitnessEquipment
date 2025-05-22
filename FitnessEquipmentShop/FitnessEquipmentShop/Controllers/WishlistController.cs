@@ -20,10 +20,7 @@ public class WishlistController : Controller
     public async Task<IActionResult> Add(int productId)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Взема текущия UserId
-        if (userId == null)
-        {
-            return Unauthorized(); // Или редирект към Login
-        }
+        
 
         await _wishlistService.AddToWishlistAsync(productId, userId);
         return RedirectToAction("Index");

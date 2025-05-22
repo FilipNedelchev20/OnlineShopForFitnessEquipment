@@ -189,10 +189,13 @@
                         <h5 class="fw-bold text-dark mb-3">@category.Name</h5>
 
                         <!-- Explore Button -->
-                        <a href="@Url.Action("ByCategory", "Product", new { categoryId = category.Id })"
+                        <a href="@(!User.Identity.IsAuthenticated
+    ? Url.Page("/Account/Login", new { area = "Identity", returnUrl = Url.Action("ByCategory", "Product", new { categoryId = category.Id }) })
+    : Url.Action("ByCategory", "Product", new { categoryId = category.Id }))"
                            class="btn btn-outline-warning fw-bold shadow-lg animate__animated animate__pulse animate__infinite rounded-pill px-4 py-2">
                             Explore →
                         </a>
+
                     </div>
                 </div>
             </div>
